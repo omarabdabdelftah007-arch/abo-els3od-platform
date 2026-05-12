@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>الكورسات — منصة التفوق في التاريخ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+:root {
+  --amber:       #6E260E;
+  --amber-dark:  #4A1A08;
+  --amber-light: #8B3A1A;
+  --amber-glow:  #C27840;
+  --gold:        #D4A843;
+  --gold-glow:   #F0C060;
+  --tan:         #D2B48C;
+  --tan-light:   #E8CFA8;
+  --cream:       #FDF6EC;
+  --dark:        #1A0F07;
+  --dark-mid:    #2C1A0D;
+  --text-muted:  #9A7040;
+  --navbar-h:    72px;
+  --ease:        0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:'Tajawal',sans-serif;
+  background:var(--cream);
+  color:var(--dark);
+  direction:rtl;
+  overflow-x:hidden;
+  min-height:100vh;
+}
+a { text-decoration:none; color:inherit; }
+ul { list-style:none; }
+::-webkit-scrollbar { width:7px; }
+::-webkit-scrollbar-track { background:var(--amber-dark); }
+::-webkit-scrollbar-thumb { background:var(--amber); border-radius:4px; }
+
+/* ── REVEAL ── */
+.reveal { opacity:0; transform:translateY(28px); transition:opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1); }
+.reveal.visible { opacity:1; transform:translateY(0); }
+
+/* ══════════════════════════
+   NAVBAR
+══════════════════════════ */
+.navbar {
+  position:sticky; top:0; z-index:1000;
+  background:linear-gradient(135deg, var(--amber-dark) 0%, var(--amber) 55%, var(--amber-light) 100%);
+  height:var(--navbar-h);
+  box-shadow:0 4px 28px rgba(0,0,0,.3);
+}
+.navbar::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold-glow),var(--amber-glow),var(--gold-glow),transparent);
+  animation:shimmer 3s ease-in-out infinite;
+}
+@keyframes shimmer { 0%,100%{opacity:.5;} 50%{opacity:1;} }
+.navbar.scrolled { box-shadow:0 8px 40px rgba(0,0,0,.45); }
+
+.navbar-inner {
+  max-width:1280px; margin:0 auto; height:100%;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 24px; gap:20px;
+}
+
+.navbar-brand { display:flex; align-items:center; gap:12px; flex-shrink:0; }
+.logo-box {
+  width:52px; height:52px; border-radius:13px; overflow:hidden; flex-shrink:0;
+  border:2px solid rgba(245,222,179,.5); box-shadow:0 0 14px rgba(245,222,179,.2);
+  animation:floatLogo 3.5s ease-in-out infinite;
+}
+.logo-box img { width:100%; height:100%; object-fit:contain; display:block; }
+@keyframes floatLogo { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-4px);} }
+.brand-name { font-size:1.3rem; font-weight:900; color:#F5DEB3; letter-spacing:.02em; }
+
+.navbar-menu { display:flex; align-items:center; gap:3px; flex:1; justify-content:center; }
+.nav-link {
+  position:relative; padding:9px 17px; color:rgba(240,230,211,.75);
+  font-family:'Tajawal',sans-serif; font-size:.95rem; font-weight:700;
+  border-radius:10px; border:none; background:transparent;
+  transition:all var(--ease); white-space:nowrap; cursor:pointer; display:inline-block;
+}
+.nav-link::after {
+  content:''; position:absolute; bottom:4px; right:14px; left:14px;
+  height:2.5px; border-radius:2px; background:var(--gold-glow);
+  box-shadow:0 0 10px var(--gold-glow);
+  opacity:0; transform:scaleX(0); transition:all var(--ease);
+}
+.nav-link:hover { color:#fff; background:rgba(255,255,255,.1); }
+.nav-link.active { color:#fff; background:rgba(255,255,255,.16); box-shadow:0 4px 18px rgba(0,0,0,.2); }
+.nav-link.active::after, .nav-link:hover::after { opacity:1; transform:scaleX(1); }
+
+.hamburger {
+  display:none; flex-direction:column; gap:5px; padding:8px;
+  border:1px solid rgba(255,255,255,.18); border-radius:10px;
+  background:rgba(255,255,255,.08); cursor:pointer;
+}
+.hamburger span { display:block; width:22px; height:2.5px; background:#F5DEB3; border-radius:2px; transition:all var(--ease); }
+.hamburger.active span:nth-child(1) { transform:translateY(7.5px) rotate(45deg); }
+.hamburger.active span:nth-child(2) { opacity:0; }
+.hamburger.active span:nth-child(3) { transform:translateY(-7.5px) rotate(-45deg); }
+
+/* ══════════════════════════
+   DRAWER
+══════════════════════════ */
+.drawer-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:1500; backdrop-filter:blur(4px); }
+.drawer-overlay.open { display:block; }
+.drawer {
+  position:fixed; top:0; right:-320px; width:300px; height:100%;
+  background:linear-gradient(180deg,#2A0F06,#1A0A04);
+  z-index:1600; transition:right .38s cubic-bezier(.22,1,.36,1);
+  border-left:1px solid rgba(110,38,14,.5);
+  display:flex; flex-direction:column; overflow-y:auto;
+  box-shadow:-8px 0 40px rgba(0,0,0,.5);
+}
+.drawer.open { right:0; }
+.drawer-head {
+  background:linear-gradient(135deg,var(--amber),var(--amber-dark));
+  padding:30px 22px 22px; border-bottom:1px solid rgba(245,222,179,.15); position:relative;
+}
+.drawer-head::after { content:''; position:absolute; bottom:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(245,222,179,.4),transparent); }
+.drawer-avatar {
+  width:58px; height:58px; border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--amber-glow));
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.5rem; font-weight:900; color:var(--amber-dark);
+  margin-bottom:12px; border:2.5px solid rgba(245,222,179,.4);
+  box-shadow:0 4px 20px rgba(0,0,0,.35);
+}
+.drawer-hi   { font-size:11px; color:rgba(245,222,179,.55); letter-spacing:1px; margin-bottom:4px; }
+.drawer-name { font-size:1.15rem; font-weight:800; color:#F5DEB3; margin-bottom:10px; line-height:1.3; }
+.drawer-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:10px; font-weight:700;
+  background:rgba(212,168,67,.15); color:var(--gold);
+  border:1px solid rgba(212,168,67,.3); border-radius:20px; padding:3px 12px;
+}
+.drawer-sec { font-size:10px; font-weight:700; letter-spacing:2px; color:rgba(210,180,140,.4); padding:18px 22px 8px; }
+.drawer-div { height:1px; background:rgba(110,38,14,.3); margin:5px 22px; }
+.d-item {
+  display:flex; align-items:center; gap:13px; padding:13px 22px;
+  color:rgba(240,230,211,.85); font-size:.92rem; font-weight:600;
+  text-decoration:none; border:none; background:none; width:100%;
+  text-align:right; cursor:pointer; border-right:3px solid transparent;
+  transition:all .2s; font-family:'Tajawal',sans-serif;
+}
+.d-item:hover { background:rgba(110,38,14,.25); border-right-color:var(--gold); color:#F5DEB3; }
+.d-icon {
+  width:37px; height:37px; border-radius:10px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:.95rem; border:1px solid rgba(110,38,14,.3); transition:transform .2s;
+}
+.d-item:hover .d-icon { transform:scale(1.1); }
+.dc1{background:rgba(110,38,14,.3);color:#D4956A;} .dc2{background:rgba(50,140,70,.15);color:#70D080;}
+.dc3{background:rgba(50,100,200,.15);color:#70A8F0;} .dc4{background:rgba(150,60,200,.15);color:#C080F0;}
+.d-lbl { flex:1; text-align:right; }
+.d-sub { font-size:.73rem; color:rgba(210,180,140,.5); font-weight:400; margin-top:2px; }
+.d-arr { color:rgba(210,180,140,.4); font-size:.8rem; }
+.d-logout {
+  margin:auto 22px 26px; display:flex; align-items:center; justify-content:center; gap:9px;
+  padding:11px; border-radius:11px; border:1px solid rgba(110,38,14,.4);
+  background:rgba(110,38,14,.15); color:rgba(240,180,140,.7);
+  font-size:.88rem; font-weight:600; cursor:pointer; text-decoration:none;
+  transition:all .2s; font-family:'Tajawal',sans-serif;
+}
+.d-logout:hover { background:rgba(110,38,14,.3); color:#F5DEB3; }
+
+/* ══════════════════════════
+   PAGE HERO
+══════════════════════════ */
+.page-hero {
+  background:linear-gradient(150deg, var(--amber-dark) 0%, var(--amber) 55%, var(--amber-glow) 100%);
+  padding:56px 28px 48px; position:relative; overflow:hidden;
+}
+.page-hero::before {
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 80% at 90% 50%, rgba(240,192,96,.12) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 60% at 10% 80%, rgba(0,0,0,.15) 0%, transparent 60%);
+}
+.page-hero::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(245,222,179,.4),transparent);
+}
+.page-hero-inner { max-width:1280px; margin:0 auto; position:relative; z-index:1; }
+.page-hero-tag {
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:.78rem; font-weight:700; letter-spacing:.12em; color:rgba(245,222,179,.65);
+  margin-bottom:14px;
+}
+.page-hero-tag::before { content:''; width:22px; height:1.5px; background:rgba(245,222,179,.45); display:block; }
+.page-hero-title { font-size:clamp(2rem,5vw,3.2rem); font-weight:900; color:#F5DEB3; line-height:1.2; margin-bottom:10px; text-shadow:0 3px 20px rgba(0,0,0,.25); }
+.page-hero-title span { color:var(--gold-glow); }
+.page-hero-sub { font-size:1rem; color:rgba(245,222,179,.7); max-width:480px; line-height:1.75; }
+
+/* ══════════════════════════
+   COURSES SECTION
+══════════════════════════ */
+.courses-wrap { padding:52px 28px 80px; max-width:1280px; margin:0 auto; }
+
+.section-label {
+  display:flex; align-items:center; gap:10px;
+  font-size:.78rem; font-weight:700; letter-spacing:.14em;
+  color:var(--amber); margin-bottom:10px;
+}
+.section-label::before { content:''; width:28px; height:2px; background:var(--amber); border-radius:2px; display:block; }
+.section-heading { font-size:clamp(1.5rem,3vw,2.2rem); font-weight:900; color:var(--dark); margin-bottom:40px; line-height:1.25; }
+.section-heading span { color:var(--amber); }
+
+/* Grid */
+.courses-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:26px; }
+
+/* Card */
+.course-card {
+  background:#fff;
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid rgba(110,38,14,.1);
+  box-shadow:0 2px 16px rgba(110,38,14,.07);
+  display:flex; flex-direction:column;
+  transition:transform var(--ease), box-shadow var(--ease), border-color var(--ease);
+}
+.course-card:hover { transform:translateY(-7px); box-shadow:0 18px 50px rgba(110,38,14,.16); border-color:rgba(110,38,14,.22); }
+
+/* Thumb */
+.c-thumb {
+  position:relative; height:180px; flex-shrink:0; overflow:hidden;
+  background:linear-gradient(135deg, var(--amber-dark), var(--amber));
+}
+.c-thumb img { width:100%; height:100%; object-fit:cover; transition:transform .5s ease; display:block; }
+.course-card:hover .c-thumb img { transform:scale(1.06); }
+.c-thumb-ph {
+  width:100%; height:100%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+}
+.c-thumb-ph i    { font-size:2.6rem; color:rgba(245,222,179,.45); }
+.c-thumb-ph span { font-size:.75rem; color:rgba(245,222,179,.4); letter-spacing:1px; font-weight:700; }
+.c-thumb-grad { position:absolute; inset:0; background:linear-gradient(0deg,rgba(26,15,7,.55) 0%,transparent 55%); }
+
+/* Badge on thumb */
+.c-status {
+  position:absolute; top:12px; right:12px; z-index:2;
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:.72rem; font-weight:700; padding:4px 11px; border-radius:50px;
+  backdrop-filter:blur(8px); letter-spacing:.03em;
+}
+.s-active { background:rgba(34,197,94,.2); border:1px solid rgba(34,197,94,.4); color:#4ADE80; }
+.s-new    { background:rgba(240,192,96,.2); border:1px solid rgba(240,192,96,.4); color:#F0C060; }
+
+/* Price */
+.c-price {
+  position:absolute; bottom:12px; left:12px; z-index:2;
+  font-size:.9rem; font-weight:800; color:#fff;
+  background:rgba(74,26,8,.7); backdrop-filter:blur(6px);
+  border:1px solid rgba(245,222,179,.2);
+  padding:4px 13px; border-radius:50px;
+}
+.c-price.free { background:rgba(34,197,94,.25); border-color:rgba(34,197,94,.4); color:#4ADE80; }
+
+/* Body */
+.c-body { padding:20px 20px 14px; flex:1; display:flex; flex-direction:column; gap:8px; }
+.c-grade { font-size:.76rem; font-weight:700; color:var(--amber); display:flex; align-items:center; gap:5px; }
+.c-title { font-size:1rem; font-weight:800; color:var(--dark); line-height:1.35; }
+.c-desc  { font-size:.84rem; color:#6B4A30; line-height:1.65; flex:1; opacity:.85; }
+.c-meta  { display:flex; align-items:center; gap:12px; padding-top:10px; border-top:1px solid rgba(110,38,14,.07); margin-top:4px; }
+.c-meta-item { display:flex; align-items:center; gap:5px; font-size:.76rem; color:var(--text-muted); font-weight:500; }
+.c-meta-item i { color:var(--amber); font-size:.72rem; }
+
+/* Progress (enrolled) */
+.c-progress { padding:0 20px 12px; }
+.c-prog-row  { display:flex; justify-content:space-between; font-size:.76rem; font-weight:700; color:#6B4A30; margin-bottom:5px; }
+.c-prog-track { height:5px; background:rgba(110,38,14,.1); border-radius:3px; overflow:hidden; }
+.c-prog-fill  { height:100%; background:linear-gradient(90deg,var(--amber),var(--gold-glow)); border-radius:3px; box-shadow:0 0 8px rgba(110,38,14,.3); transition:width 1.4s cubic-bezier(.22,1,.36,1); width:0; }
+
+/* Watch time */
+.c-watchtime {
+  margin:0 20px 12px;
+  display:flex; align-items:center; gap:7px;
+  background:rgba(110,38,14,.05); border:1px solid rgba(110,38,14,.1);
+  border-radius:10px; padding:9px 13px;
+}
+.c-watchtime i { color:var(--amber); font-size:.85rem; }
+.c-watchtime span { font-size:.8rem; font-weight:600; color:var(--dark-mid); }
+
+/* CTA */
+.c-cta { padding:0 20px 20px; }
+.btn-sub {
+  width:100%; padding:12px; border-radius:11px; border:none; cursor:pointer;
+  font-family:'Tajawal',sans-serif; font-size:.95rem; font-weight:800;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  transition:all var(--ease); position:relative; overflow:hidden;
+  background:linear-gradient(135deg,var(--amber),var(--amber-dark));
+  color:#F5DEB3; box-shadow:0 4px 16px rgba(110,38,14,.25);
+}
+.btn-sub::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,var(--amber-light),var(--amber)); opacity:0; transition:opacity var(--ease); }
+.btn-sub:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(110,38,14,.35); }
+.btn-sub:hover::before { opacity:1; }
+.btn-sub span, .btn-sub i { position:relative; z-index:1; }
+
+.btn-watch {
+  width:100%; padding:12px; border-radius:11px; border:none; cursor:pointer;
+  font-family:'Tajawal',sans-serif; font-size:.95rem; font-weight:800;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  background:linear-gradient(135deg,#16A34A,#15803D);
+  color:#fff; box-shadow:0 4px 16px rgba(22,163,74,.25);
+  transition:all var(--ease);
+  animation:watchPulse 3s ease-in-out infinite;
+}
+.btn-watch:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(22,163,74,.4); animation:none; }
+@keyframes watchPulse {
+  0%,100%{ box-shadow:0 4px 16px rgba(22,163,74,.25), 0 0 0 0 rgba(22,163,74,.2); }
+  50%    { box-shadow:0 4px 16px rgba(22,163,74,.25), 0 0 0 8px rgba(22,163,74,0); }
+}
+
+/* ══════════════════════════
+   FOOTER
+══════════════════════════ */
+footer {
+  background:#0E0704; border-top:1px solid rgba(210,180,140,.07);
+  padding:36px 28px 24px; text-align:center;
+}
+.f-inner { max-width:500px; margin:0 auto; }
+.f-name  { font-size:1.1rem; font-weight:900; color:var(--tan-light); margin-bottom:14px; }
+.f-div   { width:44px; height:2px; background:linear-gradient(90deg,transparent,var(--amber),transparent); margin:0 auto 16px; }
+.f-pow   { font-size:.8rem; color:#7A6040; }
+.f-pow span { color:var(--amber-glow); font-weight:700; }
+.f-copy  { font-size:.73rem; color:rgba(140,110,80,.4); margin-top:14px; }
+
+/* ══════════════════════════
+   RESPONSIVE
+══════════════════════════ */
+@media (max-width:768px) {
+  .navbar-menu { display:none !important; }
+  .navbar-menu.open { display:flex !important; position:fixed; top:var(--navbar-h); right:0; left:0; background:linear-gradient(180deg,var(--amber-dark),#3A1505); flex-direction:column; padding:18px; gap:4px; box-shadow:0 12px 40px rgba(0,0,0,.4); z-index:999; animation:sdown .3s ease; }
+  @keyframes sdown { from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);} }
+  .hamburger { display:flex; }
+  .courses-grid { grid-template-columns:1fr; gap:18px; }
+  .courses-wrap { padding:36px 18px 60px; }
+  .page-hero { padding:40px 18px 36px; }
+}
+</style>
+</head>
+<body>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="sideDrawer">
+  <div class="drawer-head">
+    <div class="drawer-avatar" id="drawerAvatar">أ</div>
+    <div class="drawer-hi">مرحباً بك</div>
+    <div class="drawer-name" id="drawerName">اسم الطالب</div>
+    <div class="drawer-badge"><i class="fas fa-circle" style="font-size:6px;color:#4CAF50;"></i> طالب نشط</div>
+  </div>
+  <div class="drawer-sec">الخدمات</div>
+  <a href="/" class="d-item"><div class="d-icon dc1"><i class="fas fa-home"></i></div><div class="d-lbl">الرئيسية</div><i class="fas fa-chevron-left d-arr"></i></a>
+  <a href="/courses/" class="d-item"><div class="d-icon dc1"><i class="fas fa-book-open"></i></div><div class="d-lbl"><div>الكورسات</div><div class="d-sub">تصفح جميع الكورسات</div></div><i class="fas fa-chevron-left d-arr"></i></a>
+  <a href="/my-courses/" class="d-item"><div class="d-icon dc2"><i class="fas fa-graduation-cap"></i></div><div class="d-lbl"><div>كورساتي</div><div class="d-sub">الكورسات المسجل بها</div></div><i class="fas fa-chevron-left d-arr"></i></a>
+  <div class="drawer-div"></div>
+  <a href="#" class="d-item"><div class="d-icon dc3"><i class="fas fa-file-alt"></i></div><div class="d-lbl">الامتحانات</div><i class="fas fa-chevron-left d-arr"></i></a>
+  <a href="#" class="d-item"><div class="d-icon dc4"><i class="fas fa-trophy"></i></div><div class="d-lbl">النتائج</div><i class="fas fa-chevron-left d-arr"></i></a>
+  <a href="/logout/" class="d-logout"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="navbar-inner">
+    <div class="navbar-brand">
+      <div class="logo-box">
+        <img src="/static/images/logo.png" alt="لوجو" onerror="this.parentElement.style.background='rgba(245,222,179,.15)'"/>
+      </div>
+      <span class="brand-name">منصة التفوق في التاريخ</span>
+    </div>
+    <ul class="navbar-menu" id="navMenu">
+      <li><a href="/"       class="nav-link">الرئيسية</a></li>
+      <li><a href="/courses/"    class="nav-link active">كورسات</a></li>
+      <li><a href="/my-courses/" class="nav-link">كورساتي</a></li>
+      <li><a href="#"               class="nav-link">امتحانات</a></li>
+      <li><a href="#"               class="nav-link">النتائج</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-hero-tag">منصة التفوق في التاريخ</div>
+    <h1 class="page-hero-title">جميع <span>الكورسات</span></h1>
+    <p class="page-hero-sub">اختر الكورس المناسب وابدأ رحلتك نحو التفوق</p>
+  </div>
+</div>
+
+<!-- COURSES -->
+<div class="courses-wrap">
+  <div class="section-label">الكورسات المتاحة</div>
+  <h2 class="section-heading">كورسات <span>أ. أحمد أبو السعود</span></h2>
+
+  <div class="courses-grid" id="coursesGrid">
+
+    <!-- ════════════════════════════════════════
+         كورس متاح — اشترك الآن
+         في Django: {% for course in courses %}
+    ════════════════════════════════════════ -->
+    <div class="course-card reveal" style="transition-delay:.05s">
+      <div class="c-thumb">
+        <!-- <img src="{{ course.thumbnail.url }}" alt="{{ course.title }}"/> -->
+        <div class="c-thumb-ph">
+          <i class="fas fa-scroll"></i>
+          <span>التاريخ الفرعوني</span>
+        </div>
+        <div class="c-thumb-grad"></div>
+        <span class="c-status s-new"><i class="fas fa-star"></i> جديد</span>
+        <div class="c-price">٢٥٠ جنيه</div>
+      </div>
+      <div class="c-body">
+        <div class="c-grade"><i class="fas fa-layer-group"></i> الصف الثالث الثانوي</div>
+        <div class="c-title">التاريخ الفرعوني — من نشأة الحضارة حتى الانهيار</div>
+        <div class="c-desc">دراسة شاملة لتاريخ مصر الفرعونية بأسلوب مبسط وتحليل معمق للأحداث والشخصيات البارزة.</div>
+        <div class="c-meta">
+          <div class="c-meta-item"><i class="fas fa-video"></i> ٢٤ فيديو</div>
+          <div class="c-meta-item"><i class="fas fa-clock"></i> ٦ ساعات</div>
+          <div class="c-meta-item"><i class="fas fa-users"></i> ٣٢٠ طالب</div>
+        </div>
+      </div>
+      <div class="c-cta">
+        <button class="btn-sub"><i class="fas fa-lock-open"></i><span>اشترك الآن</span></button>
+      </div>
+    </div>
+
+    <!-- كورس مفعّل — اضغط للمشاهدة -->
+    <div class="course-card reveal" style="transition-delay:.1s">
+      <div class="c-thumb">
+        <div class="c-thumb-ph">
+          <i class="fas fa-mosque"></i>
+          <span>التاريخ الإسلامي</span>
+        </div>
+        <div class="c-thumb-grad"></div>
+        <span class="c-status s-active"><i class="fas fa-check-circle"></i> مفعّل</span>
+        <div class="c-price">٢٥٠ جنيه</div>
+      </div>
+      <div class="c-body">
+        <div class="c-grade"><i class="fas fa-layer-group"></i> الصف الأول الثانوي</div>
+        <div class="c-title">التاريخ الإسلامي — صدر الإسلام والخلافة الراشدة</div>
+        <div class="c-desc">رحلة تاريخية من فجر الإسلام حتى نهاية الخلافة الراشدة مع تحليل معمق للأحداث الكبرى.</div>
+        <div class="c-meta">
+          <div class="c-meta-item"><i class="fas fa-video"></i> ٣٠ فيديو</div>
+          <div class="c-meta-item"><i class="fas fa-clock"></i> ٨ ساعات</div>
+          <div class="c-meta-item"><i class="fas fa-users"></i> ٤٨٠ طالب</div>
+        </div>
+      </div>
+      <div class="c-progress">
+        <div class="c-prog-row"><span>تقدمك في الكورس</span><span>65%</span></div>
+        <div class="c-prog-track"><div class="c-prog-fill" data-w="65"></div></div>
+      </div>
+      <div class="c-cta">
+        <button class="btn-watch"><i class="fas fa-play-circle"></i><span>اضغط للمشاهدة</span></button>
+      </div>
+    </div>
+
+    <!-- كورس متاح ٢ -->
+    <div class="course-card reveal" style="transition-delay:.15s">
+      <div class="c-thumb">
+        <div class="c-thumb-ph">
+          <i class="fas fa-globe-africa"></i>
+          <span>التاريخ الحديث</span>
+        </div>
+        <div class="c-thumb-grad"></div>
+        <div class="c-price">٣٠٠ جنيه</div>
+      </div>
+      <div class="c-body">
+        <div class="c-grade"><i class="fas fa-layer-group"></i> الصف الثاني الثانوي</div>
+        <div class="c-title">التاريخ الحديث — الثورة الصناعية وما بعدها</div>
+        <div class="c-desc">دراسة التحولات الكبرى في العالم الحديث من الثورة الصناعية حتى الحرب العالمية الثانية.</div>
+        <div class="c-meta">
+          <div class="c-meta-item"><i class="fas fa-video"></i> ٢٨ فيديو</div>
+          <div class="c-meta-item"><i class="fas fa-clock"></i> ٧ ساعات</div>
+          <div class="c-meta-item"><i class="fas fa-users"></i> ٢٩٠ طالب</div>
+        </div>
+      </div>
+      <div class="c-cta">
+        <button class="btn-sub"><i class="fas fa-lock-open"></i><span>اشترك الآن</span></button>
+      </div>
+    </div>
+
+    <!-- كورس مفعّل ٢ -->
+    <div class="course-card reveal" style="transition-delay:.2s">
+      <div class="c-thumb">
+        <div class="c-thumb-ph">
+          <i class="fas fa-landmark"></i>
+          <span>العصر العثماني</span>
+        </div>
+        <div class="c-thumb-grad"></div>
+        <span class="c-status s-active"><i class="fas fa-check-circle"></i> مفعّل</span>
+        <div class="c-price">٢٠٠ جنيه</div>
+      </div>
+      <div class="c-body">
+        <div class="c-grade"><i class="fas fa-layer-group"></i> الصف الثالث الثانوي</div>
+        <div class="c-title">تاريخ مصر في العصر العثماني</div>
+        <div class="c-desc">مرحلة مهمة في تاريخ مصر تمتد من الفتح العثماني حتى الحملة الفرنسية وما أفرزته من تحولات.</div>
+        <div class="c-meta">
+          <div class="c-meta-item"><i class="fas fa-video"></i> ٢٠ فيديو</div>
+          <div class="c-meta-item"><i class="fas fa-clock"></i> ٥ ساعات</div>
+          <div class="c-meta-item"><i class="fas fa-users"></i> ٢١٠ طالب</div>
+        </div>
+      </div>
+      <div class="c-progress">
+        <div class="c-prog-row"><span>تقدمك في الكورس</span><span>90%</span></div>
+        <div class="c-prog-track"><div class="c-prog-fill" data-w="90"></div></div>
+      </div>
+      <div class="c-cta">
+        <button class="btn-watch"><i class="fas fa-play-circle"></i><span>اضغط للمشاهدة</span></button>
+      </div>
+    </div>
+
+    <!-- كورس متاح ٣ -->
+    <div class="course-card reveal" style="transition-delay:.25s">
+      <div class="c-thumb">
+        <div class="c-thumb-ph">
+          <i class="fas fa-crown"></i>
+          <span>الدول الإسلامية</span>
+        </div>
+        <div class="c-thumb-grad"></div>
+        <span class="c-status s-new"><i class="fas fa-fire"></i> الأكثر مبيعاً</span>
+        <div class="c-price">٣٥٠ جنيه</div>
+      </div>
+      <div class="c-body">
+        <div class="c-grade"><i class="fas fa-layer-group"></i> الصف الثاني الثانوي</div>
+        <div class="c-title">الدول الإسلامية الكبرى — الأمويون والعباسيون</div>
+        <div class="c-desc">تحليل شامل لعصر الدولتين الأموية والعباسية وأثرهما الحضاري العميق على العالم الإسلامي.</div>
+        <div class="c-meta">
+          <div class="c-meta-item"><i class="fas fa-video"></i> ٣٥ فيديو</div>
+          <div class="c-meta-item"><i class="fas fa-clock"></i> ٩ ساعات</div>
+          <div class="c-meta-item"><i class="fas fa-users"></i> ٥٦٠ طالب</div>
+        </div>
+      </div>
+      <div class="c-cta">
+        <button class="btn-sub"><i class="fas fa-lock-open"></i><span>اشترك الآن</span></button>
+      </div>
+    </div>
+
+    <!-- كورس متاح ٤ -->
+    <div class="course-card reveal" style="transition-delay:.3s">
+      <div class="c-thumb">
+        <div class="c-thumb-ph">
+          <i class="fas fa-map-marked-alt"></i>
+          <span>الحروب الصليبية</span>
+        </div>
+        <div class="c-thumb-grad"></div>
+        <div class="c-price">٢٨٠ جنيه</div>
+      </div>
+      <div class="c-body">
+        <div class="c-grade"><i class="fas fa-layer-group"></i> الصف الثاني الثانوي</div>
+        <div class="c-title">الحروب الصليبية — الصراع بين الشرق والغرب</div>
+        <div class="c-desc">دراسة تحليلية لمراحل الحروب الصليبية وأبرز معاركها وأثرها على العالمين الإسلامي والأوروبي.</div>
+        <div class="c-meta">
+          <div class="c-meta-item"><i class="fas fa-video"></i> ٢٢ فيديو</div>
+          <div class="c-meta-item"><i class="fas fa-clock"></i> ٦ ساعات</div>
+          <div class="c-meta-item"><i class="fas fa-users"></i> ٣١٠ طالب</div>
+        </div>
+      </div>
+      <div class="c-cta">
+        <button class="btn-sub"><i class="fas fa-lock-open"></i><span>اشترك الآن</span></button>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════
+         {% endfor %}
+         في Django الكورسات بتيجي هنا تلقائي
+    ════════════════════════════════════════ -->
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-inner">
+    <div class="f-name">منصة التفوق في التاريخ</div>
+    <div class="f-div"></div>
+    <p class="f-pow">Powered by <span>Sigma Web</span></p>
+    <p class="f-copy">&copy; 2025 منصة التفوق في التاريخ. جميع الحقوق محفوظة.</p>
+  </div>
+</footer>
+
+<script>
+/* ─── Drawer ─── */
+const ham = document.getElementById('hamburger');
+function openDrawer()  { document.getElementById('sideDrawer').classList.add('open');    document.getElementById('drawerOverlay').classList.add('open');    ham.classList.add('active');    document.body.style.overflow='hidden'; }
+function closeDrawer() { document.getElementById('sideDrawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); ham.classList.remove('active'); document.body.style.overflow=''; }
+ham.addEventListener('click', () => document.getElementById('sideDrawer').classList.contains('open') ? closeDrawer() : openDrawer());
+
+/* ─── Nav scroll ─── */
+window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', scrollY > 20));
+
+/* ─── Nav links close mobile ─── */
+document.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', () => document.getElementById('navMenu').classList.remove('open')));
+
+/* ─── Reveal + progress bars ─── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      e.target.querySelectorAll('.c-prog-fill').forEach(bar => {
+        bar.style.width = (bar.dataset.w || 0) + '%';
+      });
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ─── Student name (Django) ─── */
+function setStudentName(full, letter) {
+  const n = document.getElementById('drawerName');
+  const a = document.getElementById('drawerAvatar');
+  if (n && full)   n.textContent = full;
+  if (a && letter) a.textContent = letter;
+}
+</script>
+</body>
+</html>

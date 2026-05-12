@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة النتائج | Student Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f4f1ec;
+            --primary: #D2B48C; /* Tan */
+            --accent: #6E260E;  /* Oxblood */
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--accent);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            border-bottom: 3px solid var(--primary);
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        /* سكشن العدادات */
+        .gauges-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .gauge-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .gauge-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .gauge-card h3 {
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+
+        /* تصميم العداد نصف الدائري باستخدام SVG */
+        .gauge-svg {
+            width: 200px;
+            height: 120px;
+        }
+
+        .gauge-bg {
+            fill: none;
+            stroke: #eee;
+            stroke-width: 12;
+            stroke-linecap: round;
+        }
+
+        .gauge-fill {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-dasharray: 282.7; /* نصف محيط الدائرة */
+            stroke-dashoffset: 282.7;
+            transition: stroke-dashoffset 2s ease-out;
+        }
+
+        .percentage {
+            font-size: 24px;
+            font-weight: bold;
+            fill: var(--accent);
+        }
+
+        /* سكشن الجدول */
+        .table-container {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: var(--accent);
+            padding: 15px;
+            text-align: center;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        tr:hover {
+            background-color: #fcfaf7;
+        }
+
+        .status-badge {
+            background: var(--accent);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            .gauges-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>لوحة متابعة النتائج</h1>
+    </header>
+
+    <div class="gauges-container">
+        <div class="gauge-card">
+            <svg class="gauge-svg" viewBox="0 0 200 120">
+                <path class="gauge-bg" d="M20,100 A80,80 0 0,1 180,100" />
+                <path class="gauge-fill" id="fill1" d="M20,100 A80,80 0 0,1 180,100" />
+                <text x="100" y="90" text-anchor="middle" class="percentage">85%</text>
+            </svg>
+            <h3>مشاهدة الكورسات</h3>
+        </div>
+
+        <div class="gauge-card">
+            <svg class="gauge-svg" viewBox="0 0 200 120">
+                <path class="gauge-bg" d="M20,100 A80,80 0 0,1 180,100" />
+                <path class="gauge-fill" id="fill2" d="M20,100 A80,80 0 0,1 180,100" />
+                <text x="100" y="90" text-anchor="middle" class="percentage">70%</text>
+            </svg>
+            <h3>نسبة إنجاز الامتحانات</h3>
+        </div>
+
+        <div class="gauge-card">
+            <svg class="gauge-svg" viewBox="0 0 200 120">
+                <path class="gauge-bg" d="M20,100 A80,80 0 0,1 180,100" />
+                <path class="gauge-fill" id="fill3" d="M20,100 A80,80 0 0,1 180,100" />
+                <text x="100" y="90" text-anchor="middle" class="percentage">92%</text>
+            </svg>
+            <h3>المعدل التراكمي (GPA)</h3>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <h2 style="margin-bottom: 15px;">تفاصيل المحاضرات والامتحانات</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>اسم الكورس / الامتحان</th>
+                    <th>الدرجة</th>
+                    <th>المحاضرات المحضورة</th>
+                    <th>المحاضرات المتبقية</th>
+                    <th>الحالة</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>برمجة دجانغو (Django)</td>
+                    <td>95/100</td>
+                    <td>12</td>
+                    <td>3</td>
+                    <td><span class="status-badge">مكتمل</span></td>
+                </tr>
+                <tr>
+                    <td>فيزياء هندسية</td>
+                    <td>88/100</td>
+                    <td>10</td>
+                    <td>5</td>
+                    <td><span class="status-badge">جاري</span></td>
+                </tr>
+                <tr>
+                    <td>رياضيات 2</td>
+                    <td>92/100</td>
+                    <td>14</td>
+                    <td>2</td>
+                    <td><span class="status-badge">مكتمل</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // وظيفة لتحريك العدادات عند تحميل الصفحة
+    function setGaugeValue(id, percent) {
+        const path = document.getElementById(id);
+        const maxOffset = 282.7;
+        const offset = maxOffset - (percent / 100) * maxOffset;
+        path.style.strokeDashoffset = offset;
+    }
+
+    // تشغيل الأنيميشن بعد تحميل الصفحة بقليل
+    window.onload = () => {
+        setTimeout(() => {
+            setGaugeValue('fill1', 85);
+            setGaugeValue('fill2', 70);
+            setGaugeValue('fill3', 92);
+        }, 300);
+    };
+</script>
+
+</body>
+</html>
