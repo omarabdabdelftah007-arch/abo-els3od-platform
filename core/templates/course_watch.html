@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <title>{{ month.title|default:"المحاضرة" }} — منصة التاريخ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+:root {
+  --tan:           #D2B48C;
+  --tan-light:     #E8CFA8;
+  --tan-dark:      #B8966A;
+  --primary:       #280C02;
+  --primary-light: #5A1A03;
+  --navbar-h:      64px;
+  --ease:          0.3s cubic-bezier(0.4,0,0.2,1);
+}
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html, body { height:100%; overflow:hidden; }
+body { font-family:'Cairo',sans-serif; background:#0A0400; color:#F0E6D3; direction:rtl; -webkit-text-size-adjust:100%; }
+a { text-decoration:none; color:inherit; }
+
+/* NAVBAR */
+.navbar {
+  height:var(--navbar-h);
+  background:linear-gradient(135deg,#1A0800,#280C02,#3D1200);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 20px; border-bottom:1px solid rgba(210,180,140,.1);
+  position:relative; z-index:100; flex-shrink:0; gap:10px;
+}
+.navbar::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--tan-light),var(--tan),var(--tan-light),transparent);
+}
+.nav-brand  { display:flex; align-items:center; gap:10px; min-width:0; }
+.nav-logo   { width:44px; height:44px; overflow:hidden; border-radius:9px; flex-shrink:0; }
+.nav-logo img { width:100%; height:100%; object-fit:contain; display:block; }
+.nav-title  {
+  font-size:1rem; font-weight:900; color:var(--tan-light);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.nav-pill {
+  display:inline-flex; align-items:center; gap:7px;
+  background:rgba(210,180,140,.1); border:1px solid rgba(210,180,140,.22);
+  border-radius:50px; padding:6px 16px;
+  font-size:.85rem; font-weight:700; color:var(--tan-light);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:40vw;
+}
+.nav-back {
+  display:inline-flex; align-items:center; gap:7px;
+  padding:8px 16px; border-radius:10px;
+  font-size:.85rem; font-weight:700; color:rgba(210,180,140,.75);
+  border:1px solid rgba(210,180,140,.2); transition:all var(--ease);
+  flex-shrink:0; white-space:nowrap;
+}
+.nav-back:hover { background:rgba(210,180,140,.1); color:var(--tan-light); }
+.nav-back span { display:inline; }
+
+/* LAYOUT */
+.layout { display:flex; height:calc(100vh - var(--navbar-h)); }
+
+/* SIDEBAR */
+.sidebar {
+  width:290px; flex-shrink:0;
+  background:#110600; border-left:1px solid rgba(210,180,140,.08);
+  display:flex; flex-direction:column; transition:width var(--ease); overflow:hidden;
+}
+.sidebar.collapsed { width:0; }
+
+.sidebar-head { padding:16px 15px 13px; border-bottom:1px solid rgba(210,180,140,.07); flex-shrink:0; }
+.sidebar-label { font-size:.68rem; font-weight:700; letter-spacing:.12em; color:rgba(210,180,140,.38); text-transform:uppercase; margin-bottom:7px; }
+.sidebar-name  { font-size:.95rem; font-weight:800; color:var(--tan-light); }
+.sidebar-count { font-size:.74rem; color:rgba(210,180,140,.38); margin-top:3px; }
+
+.lec-list { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.lec-list::-webkit-scrollbar { width:4px; }
+.lec-list::-webkit-scrollbar-thumb { background:rgba(210,180,140,.1); border-radius:2px; }
+
+.lec-item {
+  display:flex; align-items:center; gap:11px;
+  padding:13px 15px; text-decoration:none;
+  border-right:3px solid transparent; transition:all var(--ease);
+}
+.lec-item:hover { background:rgba(210,180,140,.05); border-right-color:rgba(210,180,140,.22); }
+.lec-item.active { background:rgba(210,180,140,.09); border-right-color:var(--tan); }
+
+.lec-num {
+  width:30px; height:30px; border-radius:8px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:.74rem; font-weight:800;
+  background:rgba(210,180,140,.06); color:rgba(210,180,140,.4);
+  border:1px solid rgba(210,180,140,.09); transition:all var(--ease);
+}
+.lec-item.active .lec-num {
+  background:linear-gradient(135deg,#5A1A03,#280C02);
+  color:var(--tan-light); border-color:transparent;
+}
+
+.lec-info { flex:1; min-width:0; }
+.lec-title {
+  font-size:.84rem; font-weight:700; color:rgba(232,207,168,.72);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.lec-item.active .lec-title { color:var(--tan-light); }
+
+/* PLAYER */
+.player { flex:1; display:flex; flex-direction:column; overflow-y:auto; -webkit-overflow-scrolling:touch; min-width:0; background:#0F0702; }
+.video-wrap { flex-shrink:0; background:#000; width:100%; }
+.video-ratio { position:relative; width:100%; padding-top:56.25%; background:#000; }
+.video-ratio iframe { position:absolute; inset:0; width:100%; height:100%; border:none; background:#000; }
+
+.info-bar { padding:20px 22px 15px; border-bottom:1px solid rgba(210,180,140,.07); flex-shrink:0; }
+.info-title { font-size:1.2rem; font-weight:800; color:var(--tan-light); margin-bottom:8px; word-break:break-word; }
+
+.pdf-bar { padding:15px 22px; border-bottom:1px solid rgba(210,180,140,.07); flex-shrink:0; }
+.pdf-btn {
+  display:inline-flex; align-items:center; gap:9px; padding:10px 20px; border-radius:10px;
+  background:rgba(248,113,113,.08); border:1px solid rgba(248,113,113,.2); color:#FCA5A5;
+  font-family:'Cairo',sans-serif; font-size:.88rem; font-weight:700; transition:all var(--ease);
+}
+
+.nav-bar { display:flex; align-items:center; gap:12px; padding:20px 22px; flex-shrink:0; flex-wrap:wrap; }
+.nav-btn {
+  display:inline-flex; align-items:center; gap:7px; padding:10px 20px; border-radius:10px;
+  font-family:'Cairo',sans-serif; font-size:.87rem; font-weight:700;
+  border:1px solid rgba(210,180,140,.18); background:rgba(210,180,140,.07);
+  color:rgba(210,180,140,.8); transition:all var(--ease);
+}
+.nav-btn.next { background:linear-gradient(135deg,#5A1A03,#280C02); border-color:transparent; color:var(--tan-light); }
+
+.toggle-btn {
+  position:fixed; bottom:22px; right:22px; z-index:200; width:44px; height:44px; border-radius:12px;
+  background:linear-gradient(135deg,#5A1A03,#280C02); border:1px solid rgba(210,180,140,.2); color:var(--tan-light);
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  bottom:calc(22px + env(safe-area-inset-bottom));
+  right:calc(22px + env(safe-area-inset-right));
+}
+
+/* ===== الموبايل: تجاوب حقيقي بدل ما الشاشة تتقطع أو تعمل سكرول أفقي ===== */
+@media (max-width:800px) {
+  html, body { overflow:auto; height:auto; }
+  .layout { flex-direction:column; height:auto; }
+
+  .navbar {
+    padding:0 12px; gap:8px;
+  }
+  .nav-title { font-size:.85rem; }
+  .nav-pill { padding:5px 10px; font-size:.72rem; max-width:32vw; }
+  .nav-back { padding:7px 10px; font-size:0; gap:0; }
+  .nav-back i { font-size:.95rem; }
+  .nav-back span { display:none; }
+
+  .sidebar {
+    width:100%; max-height:250px; order:2;
+    border-left:none; border-top:1px solid rgba(210,180,140,.08);
+  }
+  .sidebar.collapsed { width:100%; max-height:0; }
+
+  .player { order:1; overflow-y:visible; }
+
+  .video-wrap { position:sticky; top:0; z-index:20; }
+
+  .info-bar { padding:16px 16px 12px; }
+  .info-title { font-size:1.02rem; }
+
+  .pdf-bar { padding:12px 16px; }
+  .pdf-btn { width:100%; justify-content:center; padding:12px 16px; }
+
+  .nav-bar { padding:16px; gap:10px; }
+  .nav-btn { flex:1 1 45%; justify-content:center; padding:12px 14px; }
+
+  .toggle-btn { width:48px; height:48px; }
+}
+
+@media (max-width:420px) {
+  .nav-title { font-size:.78rem; }
+  .nav-pill { display:none; }
+  .lec-title { font-size:.8rem; }
+  .info-title { font-size:.95rem; }
+  .nav-btn { font-size:.8rem; padding:11px 10px; }
+}
+  </style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-brand">
+    <span class="nav-title">منصة التفوق في التاريخ</span>
+  </div>
+  <div class="nav-pill">
+    <i class="fas fa-play-circle"></i> {{ month.title|default:"المحاضرات المتاحة" }}
+  </div>
+  <a href="{% url 'my_courses' %}" class="nav-back"><i class="fas fa-arrow-right"></i> <span>كورساتي</span></a>
+</nav>
+
+<div class="layout">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-head">
+      <div class="sidebar-label">محتوى الشهر</div>
+      <div class="sidebar-name">{{ month.title|default:"دروس الدورة" }}</div>
+    </div>
+    <div class="lec-list">
+      {% for lec in lectures %}
+      <a href="?lecture={{ lec.id }}" class="lec-item {% if current_lecture and current_lecture.id == lec.id %}active{% endif %}">
+        <div class="lec-num">{{ forloop.counter }}</div>
+        <div class="lec-info">
+          <div class="lec-title">{{ lec.title }}</div>
+        </div>
+      </a>
+      {% empty %}
+      <div style="text-align:center;padding:40px 16px;color:rgba(210,180,140,.25);">لا توجد محاضرات بعد</div>
+      {% endfor %}
+    </div>
+  </aside>
+
+  <main class="player">
+    <div class="video-wrap">
+      <div class="video-ratio">
+        <iframe
+          id="main-video-player"
+          data-raw-url="{{ current_lecture.video_url|default:'' }}"
+          data-embed-url="{{ current_lecture.get_embed_url|default:'' }}"
+          title="{{ current_lecture.title|default:'فيديو الشرح' }}"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+
+    <div class="info-bar">
+      <div class="info-title" id="info-title-text">{{ current_lecture.title|default:"يرجى اختيار محاضرة لبدء المشاهدة" }}</div>
+    </div>
+
+    {% if current_lecture.pdf_file %}
+    <div class="pdf-bar">
+      <a href="{{ current_lecture.pdf_file.url }}" target="_blank" class="pdf-btn">
+        <i class="fas fa-file-pdf"></i> تحميل ملف PDF
+      </a>
+    </div>
+    {% endif %}
+
+    <div class="nav-bar">
+      {% if prev_lecture %}
+        <a href="?lecture={{ prev_lecture.id }}" class="nav-btn"><i class="fas fa-arrow-right"></i> السابقة</a>
+      {% endif %}
+      <div style="flex:1;"></div>
+      {% if next_lecture %}
+        <a href="?lecture={{ next_lecture.id }}" class="nav-btn next">التالية <i class="fas fa-arrow-left"></i></a>
+      {% endif %}
+    </div>
+  </main>
+</div>
+
+<button class="toggle-btn" id="toggleBtn"><i class="fas fa-list"></i></button>
+
+<script>
+// التحكم في القائمة الجانبية
+const sidebar = document.getElementById('sidebar');
+const toggleBtn = document.getElementById('toggleBtn');
+let isOpen = true;
+toggleBtn.addEventListener('click', () => {
+  isOpen = !isOpen;
+  sidebar.classList.toggle('collapsed', !isOpen);
+});
+
+// السكريبت السحري لإصلاح الروابط وحقنها بقوة لمنع الشاشة السوداء نهائياً
+document.addEventListener("DOMContentLoaded", function() {
+  const iframe = document.getElementById('main-video-player');
+  if (iframe) {
+    const rawUrl = iframe.getAttribute('data-raw-url');
+    const embedUrl = iframe.getAttribute('data-embed-url');
+    
+    let videoId = '';
+    let finalSrc = '';
+
+    // 1. محاولة استخراج المعرف إذا كان الرابط متاحاً
+    let targetUrl = rawUrl || embedUrl;
+
+    if (targetUrl) {
+      if (targetUrl.includes('v=')) {
+        videoId = targetUrl.split('v=')[1].split('&')[0];
+      } else if (targetUrl.includes('youtu.be/')) {
+        videoId = targetUrl.split('youtu.be/')[1].split('?')[0];
+      } else if (targetUrl.includes('/embed/')) {
+        videoId = targetUrl.split('/embed/')[1].split('?')[0];
+      } else if (targetUrl.includes('/shorts/')) {
+        videoId = targetUrl.split('/shorts/')[1].split('?')[0];
+      }
+    }
+
+    // 2. إذا تم العثور على الـ ID بنجاح نقوم بتشغيله بنطاق الحماية المضمون
+    if (videoId && videoId.length === 11) {
+      finalSrc = `https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1&autoplay=1`;
+    } else if (embedUrl) {
+      finalSrc = embedUrl;
+    } else {
+      // فيديو تجريبي عالمي يشتغل في أي مكان لضمان عدم وجود شاشة سوداء أبداً في حالة عدم اختيار كورس
+      finalSrc = "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?rel=0";
+    }
+
+    // حقن الرابط في الـ iframe ليعمل المتصفح فوراً
+    iframe.src = finalSrc;
+  }
+});
+</script>
+</body>
+</html>

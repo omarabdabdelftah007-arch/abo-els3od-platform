@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نتيجة الامتحان | {{ exam.title }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #0f0f1a; color: #fff; padding: 20px; }
+        .result-container { max-width: 800px; margin: 40px auto; background: #1e1e2f; padding: 30px; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); text-align: center; }
+        .score-badge { font-size: 3rem; font-weight: bold; color: #00d2ff; margin: 20px 0; text-shadow: 0 0 20px rgba(0,210,255,0.3); }
+        .status-text { font-size: 1.5rem; font-weight: bold; margin-bottom: 30px; }
+        .questions-review { text-align: right; margin-top: 40px; }
+        .review-box { background: #252538; padding: 20px; border-radius: 12px; margin-bottom: 20px; border-right: 5px solid #3b3b54; }
+        .review-box.correct { border-right-color: #2ecc71; background: rgba(46, 204, 113, 0.05); }
+        .review-box.wrong { border-right-color: #e74c3c; background: rgba(231, 76, 60, 0.05); }
+        .question-text { font-size: 1.15rem; font-weight: 600; margin-bottom: 15px; }
+        .choice-item { padding: 10px 15px; border-radius: 6px; margin-bottom: 5px; font-size: 0.95rem; background: #1e1e2f; display: flex; justify-content: space-between; }
+        .choice-item.student-picked-wrong { background: rgba(231, 76, 60, 0.2); color: #ff7675; border: 1px solid #e74c3c; }
+        .choice-item.is-the-correct-one { background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid #2ecc71; }
+        .home-btn { display: inline-block; width: 100%; background: linear-gradient(135deg, #00d2ff, #0066ff); color: white; border: none; padding: 15px; font-size: 1.1rem; font-weight: bold; border-radius: 8px; cursor: pointer; text-decoration: none; margin-top: 25px; }
+    </style>
+</head>
+<body>
+<div class="result-container">
+    <h1>🏆 تقرير نتيجة الاختبار</h1>
+    <h3>{{ exam.title }}</h3>
+    
+    <div class="score-badge">
+        ]{{ score|floatformat:0 }}%
+    </div>
+    
+    <div class="status-text">
+        {% if score >= 50 %}
+            <span style="color: #2ecc71;"><i class="fas fa-check-circle"></i> مبروك لقد اجتزت الاختبار بنجاح! 🎉</span>
+        {% else %}
+            <span style="color: #e74c3c;"><i class="fas fa-times-circle"></i> للاسف لم تجتز الاختبار، حاول مجدداً! 💔</span>
+        {% endif %}
+    </div>
+
+    <hr style="border-color: #3b3b54; margin: 40px 0;">
+
+    <div class="questions-review">
+        <h2>🔍 مراجعة الإجابات (الصح والغلط):</h2>
+        {% for item in questions_with_answers %}
+        <div class="review-box {% if item.is_correct %}correct{% else %}wrong{% endif %}">
+            <div class="question-text">
+                {{ forloop.counter }} . {{ item.object.text }}
+                {% if item.is_correct %}
+                    <span style="color: #2ecc71; float: left;"><i class="fas fa-check"></i> صح</span>
+                {% else %}
+                    <span style="color: #e74c3c; float: left;"><i class="fas fa-times"></i> خطأ</span>
+                {% endif %}
+            </div>
+            
+            <div class="choices-container">
+                <div class="choice-item {% if item.student_choice == 1 and not item.is_correct %}student-picked-wrong{% endif %} {% if item.object.correct_choice == 1 %}is-the-correct-one{% endif %}">
+                    <span>أ) {{ item.object.choice1 }}</span>
+                    {% if item.object.correct_choice == 1 %}<small>(الإجابة الصحيحة)</small>{% endif %}
+                </div>
+                <div class="choice-item {% if item.student_choice == 2 and not item.is_correct %}student-picked-wrong{% endif %} {% if item.object.correct_choice == 2 %}is-the-correct-one{% endif %}">
+                    <span>ب) {{ item.object.choice2 }}</span>
+                    {% if item.object.correct_choice == 2 %}<small>(الإجابة الصحيحة)</small>{% endif %}
+                </div>
+                <div class="choice-item {% if item.student_choice == 3 and not item.is_correct %}student-picked-wrong{% endif %} {% if item.object.correct_choice == 3 %}is-the-correct-one{% endif %}">
+                    <span>ج) {{ item.object.choice3 }}</span>
+                    {% if item.object.correct_choice == 3 %}<small>(الإجابة الصحيحة)</small>{% endif %}
+                </div>
+                <div class="choice-item {% if item.student_choice == 4 and not item.is_correct %}student-picked-wrong{% endif %} {% if item.object.correct_choice == 4 %}is-the-correct-one{% endif %}">
+                    <span>د) {{ item.object.choice4 }}</span>
+                    {% if item.object.correct_choice == 4 %}<small>(الإجابة الصحيحة)</small>{% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <a href="/" class="home-btn"><i class="fas fa-home"></i> العودة للرئيسية</a>
+</div>
+</body>
+</html>

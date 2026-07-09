@@ -1,0 +1,1 @@
+web: gunicorn core.el_saoud_platform.wsgi:application

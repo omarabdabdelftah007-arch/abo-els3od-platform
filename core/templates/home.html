@@ -105,6 +105,46 @@ ul { list-style: none; }
   border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(8px);
   cursor: pointer; display: none;
 }
+/* AUTH BUTTONS */
+.nav-auth {
+  display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+}
+.nav-btn-login {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 18px; border-radius: 10px;
+  font-family: 'Cairo',sans-serif; font-size: .88rem; font-weight: 700;
+  color: var(--tan-light);
+  border: 1.5px solid rgba(210,180,140,.3);
+  background: transparent; text-decoration: none;
+  transition: all var(--ease); white-space: nowrap;
+}
+.nav-btn-login:hover {
+  background: rgba(210,180,140,.12); border-color: rgba(210,180,140,.55);
+  color: #fff; transform: translateY(-1px);
+}
+.nav-btn-register {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 18px; border-radius: 10px;
+  font-family: 'Cairo',sans-serif; font-size: .88rem; font-weight: 700;
+  color: var(--dark); background: linear-gradient(135deg, var(--tan-light), var(--tan));
+  border: none; text-decoration: none;
+  transition: all var(--ease); white-space: nowrap;
+  box-shadow: 0 3px 14px rgba(0,0,0,.25);
+  position: relative; overflow: hidden;
+}
+.nav-btn-register::before {
+  content: ''; position: absolute; inset: 0; border-radius: 10px;
+  background: linear-gradient(135deg, #F0C060, var(--tan-light));
+  opacity: 0; transition: opacity var(--ease);
+}
+.nav-btn-register:hover { transform: translateY(-2px); box-shadow: 0 6px 22px rgba(0,0,0,.3); }
+.nav-btn-register:hover::before { opacity: 1; }
+.nav-btn-register span, .nav-btn-register i { position: relative; z-index: 1; }
+@media (max-width: 1100px) {
+  .nav-btn-login span, .nav-btn-register span { display: none; }
+  .nav-btn-login, .nav-btn-register { padding: 9px 11px; }
+}
+
 /* SCROLL REVEAL */
 .reveal {
   opacity: 0;
@@ -125,7 +165,7 @@ ul { list-style: none; }
 .navbar {
   position: sticky; top: 0; z-index: 1000;
   background: linear-gradient(135deg, #1A0800 0%, #280C02 50%, #3D1200 100%);
-  height: var(--navbar-h);
+  min-height: var(--navbar-h);
   box-shadow: 0 4px 24px rgba(0,0,0,0.35);
   transition: box-shadow var(--ease), background var(--ease);
 }
@@ -142,9 +182,9 @@ ul { list-style: none; }
   background: linear-gradient(135deg, #0E0500 0%, #1A0800 50%, #280C02 100%);
 }
 .navbar-inner {
-  max-width: 1400px; margin: 0 auto; height: 100%;
+  max-width: 1400px; margin: 0 auto; min-height: var(--navbar-h);
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 24px; gap: 20px;
+  padding: 10px 24px; gap: 20px; flex-wrap: wrap;
 }
 .navbar-brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .logo-icon {
@@ -173,7 +213,7 @@ ul { list-style: none; }
 
 .navbar-menu {
   display: flex; align-items: center; list-style: none;
-  gap: 4px; flex: 1; justify-content: center;
+  gap: 4px; flex: 1; justify-content: center; flex-wrap: wrap;
 }
 .nav-link {
   position: relative;
@@ -503,8 +543,8 @@ ul { list-style: none; }
 .rank-2 { background: linear-gradient(135deg,#C0C0C0,#A8A8A8); color: #2A2A2A; box-shadow: 0 4px 16px rgba(160,160,160,0.4); }
 .rank-3 { background: linear-gradient(135deg,#CD7F32,#A0522D); color: #fff; box-shadow: 0 4px 16px rgba(160,82,45,0.4); }
 .rank-other { background: rgba(40,12,2,0.08); color: var(--primary); border: 1.5px solid rgba(40,12,2,0.15); }
-.student-info { flex: 1; position: relative; z-index: 1; }
-.student-name  { font-size: 1rem; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+.student-info { flex: 1; position: relative; z-index: 1; min-width: 0; }
+.student-name  { font-size: 1rem; font-weight: 700; color: var(--dark); margin-bottom: 4px; overflow-wrap: anywhere; }
 .student-grade { font-size: 0.85rem; color: #7A5C3C; font-weight: 500; }
 .student-score { position: relative; z-index: 1; text-align: center; }
 .student-score-number { font-size: 1.4rem; font-weight: 900; color: var(--primary); display: block; line-height: 1; }
@@ -624,6 +664,13 @@ ul { list-style: none; }
 .footer-whatsapp:hover { background: rgba(37,211,102,0.12); border-color: rgba(37,211,102,0.4); box-shadow: 0 4px 20px rgba(37,211,102,0.15); transform: translateY(-2px); }
 .footer-copy { font-size: 0.78rem; color: rgba(150,130,110,0.5); margin-top: 28px; }
 
+/* USER LOGGED-IN STATE IN NAVBAR */
+.user-logged-in { display: flex; align-items: center; gap: 12px; }
+.user-welcome-text { color: var(--tan-light); font-family: 'Cairo', sans-serif; font-size: 0.9rem; font-weight: 700; white-space: nowrap; }
+
+/* Auth buttons duplicated inside the mobile menu — hidden on desktop, only shown when the mobile dropdown is open */
+.nav-auth-mobile { display: none; }
+
 /* RESPONSIVE */
 @media (max-width: 1024px) {
   .achievements-counters { grid-template-columns: repeat(2,1fr); }
@@ -631,134 +678,60 @@ ul { list-style: none; }
   .hero-image-ring { width: 340px; height: 340px; }
 }
 @media (max-width: 768px) {
-  :root { --navbar-h: 68px; }
-  .navbar-menu { display: none !important; }
+  :root { --navbar-h: 64px; }
+  .navbar-inner { padding: 10px 16px; }
+  .navbar-menu {
+    display: none !important;
+  }
   .navbar-menu.open {
     display: flex !important;
-    position: fixed;
-    top: var(--navbar-h); right: 0; left: 0;
+    position: absolute;
+    top: 100%; right: 0; left: 0;
     background: linear-gradient(180deg, #1A0800, #0E0500);
-    flex-direction: column; padding: 24px 20px 32px; gap: 6px;
+    flex-direction: column; align-items: stretch;
+    padding: 12px 14px 18px; gap: 4px;
     box-shadow: 0 12px 40px rgba(0,0,0,0.5); z-index: 999;
     animation: slideDown 0.3s ease;
+    border-top: 1px solid rgba(210,180,140,0.12);
   }
+  .navbar-menu.open .nav-link { justify-content: flex-start; padding: 13px 16px; width: 100%; }
+  .nav-auth-mobile.nav-auth-mobile {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-top: 8px; padding-top: 14px;
+    border-top: 1px solid rgba(210,180,140,0.12);
+  }
+  .navbar-menu.open .nav-auth-mobile .nav-btn-login,
+  .navbar-menu.open .nav-auth-mobile .nav-btn-register {
+    justify-content: center; padding: 12px 18px; width: 100%;
+  }
+  .navbar-menu.open .nav-auth-mobile .nav-btn-login span,
+  .navbar-menu.open .nav-auth-mobile .nav-btn-register span { display: inline; }
   @keyframes slideDown { from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);} }
   .hamburger { display: flex; }
+  .nav-auth-desktop { display: none; }
+  .brand-title { font-size: 1.15rem; }
+  .logo-icon { width: 52px; height: 52px; }
   .hero-inner { flex-direction: column; text-align: center; align-items: center; }
   .hero-text  { max-width: 100%; }
-  .hero-image-ring { width: 260px; height: 260px; order: -1; }
-  .hero-badge.bottom { left: -5%; }
-  .hero-badge.top    { right: -5%; }
+  .hero-image-ring { width: 220px; height: 220px; order: -1; margin-bottom: 12px; }
   .hero-cta { justify-content: center; }
+  .hero-description { margin-inline: auto; }
   .progress-cards { grid-template-columns: 1fr; }
   .students-grid  { grid-template-columns: 1fr; }
   .achievements-counters { grid-template-columns: repeat(2,1fr); }
   .contact-grid { grid-template-columns: 1fr; }
   .bio-stats { grid-template-columns: repeat(2,1fr); }
-  .section { padding: 60px 20px; }
-  .hero-section { padding: 40px 20px; }
+  .bio-card { padding: 30px 22px; }
+  .contact-card { padding: 28px 22px; }
+  .section { padding: 56px 18px; }
+  .hero-section { padding: 36px 16px; }
+  .student-card { flex-wrap: wrap; }
 }
 @media (max-width: 480px) {
   .achievements-counters { grid-template-columns: 1fr; }
-  .hero-image-ring { width: 220px; height: 220px; }
+  .hero-image-ring { width: 180px; height: 180px; }
   .bio-stats { grid-template-columns: 1fr 1fr; }
 }
-
-/* SIDE DRAWER */
-.drawer-overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.65);
-  z-index: 1500; backdrop-filter: blur(4px);
-  transition: opacity 0.3s ease;
-}
-.drawer-overlay.open { display: block; }
-.drawer {
-  position: fixed; top: 0; right: -320px;
-  width: 300px; height: 100%;
-  background: linear-gradient(180deg, #1A0800 0%, #0E0500 100%);
-  z-index: 1600;
-  transition: right 0.38s cubic-bezier(0.22,1,0.36,1);
-  border-left: 1px solid rgba(210,180,140,0.15);
-  display: flex; flex-direction: column;
-  overflow-y: auto;
-  box-shadow: -8px 0 40px rgba(0,0,0,0.6);
-}
-.drawer.open { right: 0; }
-.drawer-head {
-  background: linear-gradient(135deg, #280C02, #1A0800);
-  padding: 32px 22px 24px;
-  border-bottom: 1px solid rgba(210,180,140,0.12);
-  position: relative; overflow: hidden;
-}
-.drawer-head::before {
-  content: '';
-  position: absolute; top: -40px; left: -40px;
-  width: 160px; height: 160px; border-radius: 50%;
-  background: rgba(210,180,140,0.04); pointer-events: none;
-}
-.drawer-head::after {
-  content: '';
-  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(210,180,140,0.3), transparent);
-}
-.drawer-avatar {
-  width: 60px; height: 60px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--tan), var(--tan-dark));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem; font-weight: 900; color: var(--dark);
-  margin-bottom: 14px;
-  border: 2.5px solid rgba(210,180,140,0.35);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-  flex-shrink: 0;
-}
-.drawer-hi { font-size: 11px; color: rgba(210,180,140,0.5); letter-spacing: 1px; margin-bottom: 4px; }
-.drawer-name { font-size: 1.2rem; font-weight: 800; color: var(--tan-light); line-height: 1.3; margin-bottom: 10px; }
-.drawer-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 10px; font-weight: 700;
-  background: rgba(210,180,140,0.12); color: var(--tan);
-  border: 1px solid rgba(210,180,140,0.25);
-  border-radius: 20px; padding: 3px 12px; letter-spacing: 0.5px;
-}
-.drawer-section-title {
-  font-size: 10px; font-weight: 700; letter-spacing: 2px;
-  color: rgba(210,180,140,0.4); padding: 20px 22px 8px; text-transform: uppercase;
-}
-.drawer-divider { height: 1px; background: rgba(40,12,2,0.4); margin: 6px 22px; }
-.drawer-item {
-  display: flex; align-items: center; gap: 14px;
-  padding: 14px 22px; color: rgba(232,207,168,0.85);
-  font-size: 0.95rem; font-weight: 600;
-  text-decoration: none; border: none; background: none;
-  width: 100%; text-align: right; cursor: pointer;
-  border-right: 3px solid transparent;
-  transition: all 0.2s ease; font-family: 'Cairo',sans-serif;
-}
-.drawer-item:hover { background: rgba(210,180,140,0.08); border-right-color: var(--tan); color: var(--tan-light); }
-.drawer-item-icon {
-  width: 38px; height: 38px; border-radius: 11px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1rem; flex-shrink: 0;
-  border: 1px solid rgba(40,12,2,0.3);
-  transition: all 0.2s;
-}
-.drawer-item:hover .drawer-item-icon { transform: scale(1.1); }
-.di-c1 { background: rgba(40,12,2,0.3); color: var(--tan); }
-.di-c2 { background: rgba(50,140,70,0.15); color: #70D080; }
-.di-c3 { background: rgba(50,100,200,0.15); color: #70A8F0; }
-.di-c4 { background: rgba(150,60,200,0.15); color: #C080F0; }
-.drawer-item-label { flex: 1; text-align: right; }
-.drawer-item-sub { font-size: 0.75rem; color: rgba(210,180,140,0.45); font-weight: 400; margin-top: 2px; }
-.drawer-arrow { color: rgba(210,180,140,0.35); font-size: 0.85rem; }
-.drawer-logout {
-  margin: auto 22px 28px;
-  display: flex; align-items: center; justify-content: center; gap: 10px;
-  padding: 12px; border-radius: 12px; border: 1px solid rgba(40,12,2,0.5);
-  background: rgba(40,12,2,0.2); color: rgba(210,180,140,0.6);
-  font-size: 0.9rem; font-weight: 600; cursor: pointer;
-  text-decoration: none; transition: all 0.2s; font-family: 'Cairo',sans-serif;
-}
-.drawer-logout:hover { background: rgba(40,12,2,0.35); color: var(--tan-light); border-color: rgba(40,12,2,0.7); }
 </style>
 </head>
 <body>
@@ -782,60 +755,73 @@ ul { list-style: none; }
 </div>
 <!-- END INTRO -->
 
-<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
-<div class="drawer" id="sideDrawer">
-  <div class="drawer-head">
-    <div class="drawer-avatar" id="drawerAvatar">أ</div>
-    <div class="drawer-hi">مرحباً بك</div>
-    <div class="drawer-name" id="drawerName">اسم الطالب</div>
-    <div class="drawer-badge">
-      <i class="fas fa-circle" style="font-size:6px;color:#4CAF50;"></i>
-      طالب نشط
-    </div>
-  </div>
-  <div class="drawer-section-title">الخدمات</div>
-  <a href="/courses/" class="drawer-item" onclick="closeDrawer()">
-    <div class="drawer-item-icon di-c1"><i class="fas fa-book-open"></i></div>
-    <div class="drawer-item-label"><div>الكورسات</div><div class="drawer-item-sub">تصفح جميع الكورسات</div></div>
-    <i class="fas fa-chevron-left drawer-arrow"></i>
-  </a>
-  <a href="/my-courses/" class="drawer-item" onclick="closeDrawer()">
-    <div class="drawer-item-icon di-c2"><i class="fas fa-graduation-cap"></i></div>
-    <div class="drawer-item-label"><div>كورساتي</div><div class="drawer-item-sub">الكورسات المسجل بها</div></div>
-    <i class="fas fa-chevron-left drawer-arrow"></i>
-  </a>
-  <div class="drawer-divider"></div>
-  <a href="/exams/" class="drawer-item" onclick="closeDrawer()">
-    <div class="drawer-item-icon di-c3"><i class="fas fa-file-alt"></i></div>
-    <div class="drawer-item-label"><div>الامتحانات</div><div class="drawer-item-sub">امتحاناتك القادمة والسابقة</div></div>
-    <i class="fas fa-chevron-left drawer-arrow"></i>
-  </a>
-  <a href="/results/" class="drawer-item" onclick="closeDrawer()">
-    <div class="drawer-item-icon di-c4"><i class="fas fa-trophy"></i></div>
-    <div class="drawer-item-label"><div>النتائج</div><div class="drawer-item-sub">اطلع على نتائجك</div></div>
-    <i class="fas fa-chevron-left drawer-arrow"></i>
-  </a>
-  <div class="drawer-divider"></div>
-  <a href="/logout/" class="drawer-logout">
-    <i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span>
-  </a>
-</div>
-
 <nav class="navbar" id="navbar">
   <div class="navbar-inner">
     <div class="navbar-brand">
       <div class="logo-icon">
         <img src="/static/images/logo.png" alt="لوجو المنصة" style="width:100%;height:100%;object-fit:contain;border-radius:10px;"/>
       </div>
-      <span class="brand-title">منصة التفوق في التاريخ</span>
+      <span class="brand-title">منصة سر التفوق في التاريخ</span>
     </div>
+
     <ul class="navbar-menu" id="navMenu">
-      <li><a href="/"        class="nav-link active">الرئيسية</a></li>
+      <li><a href="/"           class="nav-link active">الرئيسية</a></li>
       <li><a href="/courses/"     class="nav-link">كورسات</a></li>
       <li><a href="/my-courses/"  class="nav-link">كورساتي</a></li>
       <li><a href="/exams/"       class="nav-link">امتحانات</a></li>
       <li><a href="/results/"     class="nav-link">النتائج</a></li>
+
+      {% if user.is_staff or user.is_superuser %}
+        <li>
+          <a href="/admin/" class="nav-link admin-btn" target="_blank" style="color: #FFD700; font-weight: bold; border: 1px dashed #FFD700; padding: 5px 10px; border-radius: 6px; background-color: rgba(255, 215, 0, 0.1);">
+            <i class="fa-solid fa-user-shield"></i> لوحة التحكم
+          </a>
+        </li>
+      {% endif %}
+
+      <!-- Auth buttons duplicated here so they show inside the mobile dropdown, just like on desktop -->
+      <li class="nav-auth-mobile">
+        {% if user.is_authenticated %}
+          <span class="user-welcome-text">أهلاً بك، {{ user.username }} 👤</span>
+          <a href="{% url 'signout' %}" class="nav-btn-login" style="border-color: rgba(255, 99, 71, 0.4); color: #ff6b6b;">
+            <i class="fa-solid fa-sign-out-alt"></i>
+            <span>تسجيل الخروج</span>
+          </a>
+        {% else %}
+          <a href="{% url 'signin' %}" class="nav-btn-login">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            <span>تسجيل الدخول</span>
+          </a>
+          <a href="{% url 'signup' %}" class="nav-btn-register">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>حساب جديد</span>
+          </a>
+        {% endif %}
+      </li>
     </ul>
+
+    <div class="nav-auth nav-auth-desktop">
+        {% if user.is_authenticated %}
+          <div class="user-logged-in">
+            <span class="user-welcome-text">
+              أهلاً بك، {{ user.username }} 👤
+            </span>
+            <a href="{% url 'signout' %}" class="nav-btn-login" style="border-color: rgba(255, 99, 71, 0.4); color: #ff6b6b;">
+              <i class="fa-solid fa-sign-out-alt"></i>
+              <span>تسجيل الخروج</span>
+            </a>
+          </div>
+        {%   else %}
+          <a href="{% url 'signin' %}" class="nav-btn-login">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            <span>تسجيل الدخول</span>
+          </a>
+          <a href="{% url 'signup' %}" class="nav-btn-register">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>حساب جديد</span>
+          </a>
+        {% endif %}
+      </div>
     <button class="hamburger" id="hamburger" aria-label="Toggle menu">
       <span></span><span></span><span></span>
     </button>
@@ -851,7 +837,7 @@ ul { list-style: none; }
   <div class="particles" id="particles"></div>
   <div class="hero-inner">
     <div class="hero-text">
-      <div class="hero-eyebrow">منصة التفوق في التاريخ</div>
+      <div class="hero-eyebrow">منصة سر التفوق في التاريخ</div>
       <h1 class="hero-title">تعلّم بلا حدود<br/><span class="highlight">وحقّق التفوق</span></h1>
       <p class="hero-description">منصة تعليمية متكاملة في مادة التاريخ تجمع بين الكورسات التفاعلية والامتحانات الإلكترونية ومتابعة التقدم، لتجربة تعليمية استثنائية.</p>
       <div class="hero-cta">
@@ -881,12 +867,12 @@ ul { list-style: none; }
           <div class="bio-avatar-icon"><i class="fas fa-user-tie"></i></div>
           <div>
             <div class="bio-name">أ. أحمد أبو السعود</div>
-            <div class="bio-role">مدرس التاريخ — منصة التفوق</div>
+            <div class="bio-role">مدرس التاريخ — منصة سر التفوق</div>
           </div>
         </div>
-        <p class="bio-text">خبرة تزيد عن ١٥ عامًا في تدريس التاريخ للمرحلتين الإعدادية والثانوية. يتميز بأسلوب تبسيطي فريد يجعل المادة ممتعة وسهلة الفهم. حاصل على ماجستير في التعليم وشهادات دولية متعددة في المناهج التفاعلية.</p>
+        <p class="bio-text">خبرة تزيد عن 25 عامًا في تدريس التاريخ للمرحله الثانوية. يتميز بأسلوب تبسيطي فريد يجعل المادة ممتعة وسهلة الفهم. حاصل على ماجستير في التعليم وشهادات دولية متعددة في المناهج التفاعلية.</p>
         <div class="bio-stats">
-          <div class="bio-stat"><span class="bio-stat-number">١٥+</span><span class="bio-stat-label">سنة خبرة</span></div>
+          <div class="bio-stat"><span class="bio-stat-number">25+</span><span class="bio-stat-label">سنة خبرة</span></div>
           <div class="bio-stat"><span class="bio-stat-number">٥٠٠٠+</span><span class="bio-stat-label">طالب متخرج</span></div>
           <div class="bio-stat"><span class="bio-stat-number">٩٨٪</span><span class="bio-stat-label">نسبة نجاح</span></div>
         </div>
@@ -936,26 +922,34 @@ ul { list-style: none; }
     <div class="progress-cards">
       <div class="progress-card reveal" style="transition-delay:0.1s">
         <div class="progress-icon"><i class="fas fa-tasks"></i></div>
-        <span class="progress-number" data-count="248">0</span>
+        <span class="progress-number" data-count="{{ completed_tasks_count|default:0 }}">0</span>
         <span class="progress-label">المهام المكتملة</span>
       </div>
+
       <div class="progress-card reveal" style="transition-delay:0.2s">
-        <div class="donut-wrap">
-          <svg class="donut-svg" width="120" height="120" viewBox="0 0 120 120">
+        <div class="donut-wrap" style="position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+
+          <svg class="donut-svg" width="120" height="120" viewBox="0 0 120 120" style="display: block;">
             <circle class="donut-bg"   cx="60" cy="60" r="50" stroke-width="10"/>
             <circle class="donut-fill" cx="60" cy="60" r="50" stroke-width="10"
-              stroke-dasharray="314" stroke-dashoffset="314" data-target="82"/>
-            <text class="donut-center" x="60" y="60">82%</text>
+              stroke-dasharray="314" stroke-dashoffset="314" data-target="{{ total_completion_percentage|default:0 }}"/>
           </svg>
+
+          <div class="donut-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -85%); margin: 0; padding: 0; pointer-events: none; white-space: nowrap;">
+              {{ total_completion_percentage|default:0 }}%
+          </div>
+
           <span class="progress-label">نسبة الإنجاز الكلية</span>
         </div>
       </div>
+
       <div class="progress-card reveal" style="transition-delay:0.3s">
         <div class="progress-icon"><i class="fas fa-fire"></i></div>
-        <span class="progress-number" data-count="14">0</span>
+        <span class="progress-number" data-count="{{ streak_days|default:0 }}">0</span>
         <span class="progress-label">أيام متتالية</span>
       </div>
     </div>
+
     <div style="text-align:center;margin-top:12px;" class="reveal-up">
       <a href="/results/" class="progress-more-btn">
         <i class="fas fa-chart-line"></i><span>عرض المزيد</span>
@@ -971,38 +965,55 @@ ul { list-style: none; }
       <h2 class="section-title">أعلى <span>الدرجات</span> أونلاين</h2>
       <p class="section-subtitle">قائمة الشرف للطلاب المتميزين في الاختبارات الإلكترونية</p>
     </div>
+
     <div class="students-grid">
-      <div class="student-card reveal" style="transition-delay:0.05s">
-        <div class="student-rank rank-1"><i class="fas fa-crown"></i></div>
-        <div class="student-info"><div class="student-name">أحمد محمد علي</div><div class="student-grade">الصف الثالث الثانوي</div></div>
-        <div class="student-score"><span class="student-score-number">98.5%</span><span class="student-score-label">المجموع</span></div>
-        <div class="student-badge">⭐ الأول</div>
-      </div>
-      <div class="student-card reveal" style="transition-delay:0.1s">
-        <div class="student-rank rank-2">2</div>
-        <div class="student-info"><div class="student-name">فاطمة إبراهيم</div><div class="student-grade">الصف الثالث الثانوي</div></div>
-        <div class="student-score"><span class="student-score-number">97.2%</span><span class="student-score-label">المجموع</span></div>
-      </div>
-      <div class="student-card reveal" style="transition-delay:0.15s">
-        <div class="student-rank rank-3">3</div>
-        <div class="student-info"><div class="student-name">محمود حسن سعيد</div><div class="student-grade">الصف الثاني الثانوي</div></div>
-        <div class="student-score"><span class="student-score-number">95.8%</span><span class="student-score-label">المجموع</span></div>
-      </div>
-      <div class="student-card reveal" style="transition-delay:0.2s">
-        <div class="student-rank rank-other">4</div>
-        <div class="student-info"><div class="student-name">نور الدين مصطفى</div><div class="student-grade">الصف الأول الثانوي</div></div>
-        <div class="student-score"><span class="student-score-number">94.1%</span><span class="student-score-label">المجموع</span></div>
-      </div>
-      <div class="student-card reveal" style="transition-delay:0.25s">
-        <div class="student-rank rank-other">5</div>
-        <div class="student-info"><div class="student-name">سارة عبد الرحمن</div><div class="student-grade">الصف الثالث الثانوي</div></div>
-        <div class="student-score"><span class="student-score-number">93.7%</span><span class="student-score-label">المجموع</span></div>
-      </div>
-      <div class="student-card reveal" style="transition-delay:0.3s">
-        <div class="student-rank rank-other">6</div>
-        <div class="student-info"><div class="student-name">عمر طارق الصعيدي</div><div class="student-grade">الصف الثاني الثانوي</div></div>
-        <div class="student-score"><span class="student-score-number">92.4%</span><span class="student-score-label">المجموع</span></div>
-      </div>
+      {% for student in top_students %}
+        <div class="student-card reveal" style="transition-delay:0.05s">
+
+          <div class="student-rank rank-{{ student.arrange|default:'other' }}">
+            {% if student.arrange == 1 %}
+              <i class="fas fa-crown"></i>
+            {% else %}
+              {{ student.arrange }}
+            {% endif %}
+          </div>
+
+          <div class="student-info">
+            <div class="student-name">
+              {% if student.name %}
+                {{ student.name }}
+              {% elif student.student %}
+                {{ student.student }}
+              {% else %}
+                {{ student }}
+              {% endif %}
+            </div>
+            <div class="student-grade">{{ student.get_grade_display }}</div>
+          </div>
+
+          <div class="student-score">
+            <span class="student-score-number">
+              {% if student.score %}
+                {{ student.score }}
+              {% elif student.percentage %}
+                {{ student.percentage }}
+              {% else %}
+                ---
+              {% endif %}
+            </span>
+            <span class="student-score-label">المجموع</span>
+          </div>
+
+          {% if student.arrange == 1 %}
+            <div class="student-badge">⭐ الأول</div>
+          {% endif %}
+
+        </div>
+      {% empty %}
+        <div style="grid-column: span 3; text-align: center; color: var(--tan-dark); padding: 30px; font-weight: bold;">
+          <i class="fas fa-info-circle"></i> جاري تحديث لوحة الشرف وأوائل الطلاب...
+        </div>
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -1050,25 +1061,21 @@ ul { list-style: none; }
       <div class="contact-card reveal" style="transition-delay:0.1s">
         <div class="contact-card-title"><i class="fas fa-share-alt"></i> تابع الأستاذ على السوشيال ميديا</div>
         <div class="social-buttons">
-          <a href="https://wa.me/+201117701289" target="_blank" class="social-btn whatsapp"><i class="fab fa-whatsapp"></i><span>واتساب — تواصل مباشر</span></a>
-          <a href="#" target="_blank" class="social-btn facebook"><i class="fab fa-facebook-f"></i><span>صفحة الفيسبوك</span></a>
+          <a href="https://wa.me/+201064604848" target="_blank" class="social-btn whatsapp"><i class="fab fa-whatsapp"></i><span>واتساب — تواصل مباشر</span></a>
+          <a href="https://www.facebook.com/share/1FkBeD4ZKk/?mibextid=wwXIfr" target="_blank" class="social-btn facebook"><i class="fab fa-facebook-f"></i><span>صفحة الفيسبوك</span></a>
           <a href="#" target="_blank" class="social-btn youtube"><i class="fab fa-youtube"></i><span>قناة يوتيوب</span></a>
           <a href="#" target="_blank" class="social-btn telegram"><i class="fab fa-telegram-plane"></i><span>قناة التيليجرام</span></a>
         </div>
       </div>
       <div class="contact-card reveal" style="transition-delay:0.2s">
         <div class="contact-card-title"><i class="fas fa-life-ring"></i> الدعم الفني</div>
-        <a href="https://wa.me/+201117701289" target="_blank" class="support-btn">
+        <a href="https://wa.me/+201064604848" target="_blank" class="support-btn">
           <i class="fab fa-whatsapp"></i>
           <div><div style="font-weight:700;margin-bottom:3px;">دعم فني واتساب</div><div style="font-size:0.8rem;opacity:0.7;">متاح ٢٤/٧ للرد على استفساراتك</div></div>
         </a>
         <a href="mailto:support@platform.com" class="support-btn">
           <i class="fas fa-envelope"></i>
           <div><div style="font-weight:700;margin-bottom:3px;">البريد الإلكتروني</div><div style="font-size:0.8rem;opacity:0.7;">support@platform.com</div></div>
-        </a>
-        <a href="tel:+201117701289" class="support-btn">
-          <i class="fas fa-phone-alt"></i>
-          <div><div style="font-weight:700;margin-bottom:3px;">اتصل بنا مباشرة</div><div style="font-size:0.8rem;opacity:0.7;" dir="ltr">+20 111 770 1289</div></div>
         </a>
         <div class="support-info">
           <i class="fas fa-clock" style="color:var(--tan);margin-left:6px;"></i>
@@ -1085,7 +1092,7 @@ ul { list-style: none; }
       <div class="logo-icon small">
         <img src="/static/images/logo.png" alt="لوجو المنصة" style="width:100%;height:100%;object-fit:contain;border-radius:8px;"/>
       </div>
-      <span class="footer-brand-name">منصة التفوق في التاريخ</span>
+      <span class="footer-brand-name">منصة سر التفوق في التاريخ</span>
     </div>
     <div class="footer-divider"></div>
     <p class="footer-powered">Powered by <span class="sigma-text">Sigma Web</span></p>
@@ -1154,21 +1161,9 @@ ul { list-style: none; }
 const hamburger = document.getElementById('hamburger');
 const navMenu   = document.getElementById('navMenu');
 
-function openDrawer() {
-  document.getElementById('sideDrawer').classList.add('open');
-  document.getElementById('drawerOverlay').classList.add('open');
-  hamburger.classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-function closeDrawer() {
-  document.getElementById('sideDrawer').classList.remove('open');
-  document.getElementById('drawerOverlay').classList.remove('open');
-  hamburger.classList.remove('active');
-  document.body.style.overflow = '';
-}
 hamburger.addEventListener('click', () => {
-  const isOpen = document.getElementById('sideDrawer').classList.contains('open');
-  if (isOpen) closeDrawer(); else openDrawer();
+  navMenu.classList.toggle('open');
+  hamburger.classList.toggle('active');
 });
 
 const navbar = document.getElementById('navbar');
@@ -1258,13 +1253,6 @@ if (container) {
 }
 
 window.addEventListener('load', () => { document.querySelector('.hero-text')?.classList.add('visible'); });
-
-function setStudentName(fullName, firstLetter) {
-  const nameEl   = document.getElementById('drawerName');
-  const avatarEl = document.getElementById('drawerAvatar');
-  if (nameEl && fullName) nameEl.textContent = fullName;
-  if (avatarEl && firstLetter) avatarEl.textContent = firstLetter;
-}
 </script>
 </body>
 </html>

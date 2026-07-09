@@ -67,7 +67,7 @@ ul { list-style: none; }
 .navbar {
   position: sticky; top: 0; z-index: 1000;
   background: linear-gradient(135deg, #1A0800 0%, #280C02 50%, #3D1200 100%);
-  height: var(--navbar-h);
+  min-height: var(--navbar-h);
   box-shadow: 0 4px 24px rgba(0,0,0,0.35);
   transition: box-shadow var(--ease), background var(--ease);
 }
@@ -83,9 +83,9 @@ ul { list-style: none; }
   background: linear-gradient(135deg, #0E0500 0%, #1A0800 50%, #280C02 100%);
 }
 .navbar-inner {
-  max-width: 1400px; margin: 0 auto; height: 100%;
+  max-width: 1400px; margin: 0 auto; min-height: var(--navbar-h);
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 24px; gap: 20px;
+  padding: 10px 24px; gap: 20px; flex-wrap: wrap;
 }
 .navbar-brand { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .logo-icon {
@@ -107,7 +107,7 @@ ul { list-style: none; }
 }
 .navbar-menu {
   display: flex; align-items: center; list-style: none;
-  gap: 4px; flex: 1; justify-content: center;
+  gap: 4px; flex: 1; justify-content: center; flex-wrap: wrap;
 }
 .nav-link {
   position: relative; display: inline-flex; align-items: center;
@@ -123,6 +123,22 @@ ul { list-style: none; }
 .nav-link:hover { color: #fff; background: rgba(210,180,140,0.15); transform: translateY(-1px); }
 .nav-link.active { color: #fff; background: rgba(210,180,140,0.18); box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
 .nav-link.active::after, .nav-link:hover::after { opacity: 1; transform: scaleX(1); }
+
+/* Auth area */
+.nav-auth { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.nav-btn-login {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 18px; border-radius: 10px;
+  font-family: 'Cairo',sans-serif; font-size: .88rem; font-weight: 700;
+  color: var(--tan-light); border: 1.5px solid rgba(210,180,140,.3);
+  background: transparent; text-decoration: none; transition: all var(--ease); white-space: nowrap;
+}
+.nav-btn-login:hover { background: rgba(210,180,140,.12); border-color: rgba(210,180,140,.55); color: #fff; }
+.user-welcome-text { color: var(--tan-light); font-family: 'Cairo',sans-serif; font-size: .9rem; font-weight: 700; white-space: nowrap; }
+
+/* Auth buttons duplicated inside the mobile menu — hidden on desktop, only shown when the mobile dropdown is open */
+.nav-auth-mobile { display: none; }
+
 .hamburger {
   display: none; flex-direction: column; gap: 5px;
   background: rgba(210,180,140,0.12); border: 1px solid rgba(210,180,140,0.2);
@@ -337,47 +353,32 @@ ul { list-style: none; }
 .footer-divider { width: 60px; height: 2px; background: linear-gradient(90deg,transparent,var(--tan-dark),transparent); margin: 0 auto 24px; }
 .footer-copy { font-size: 0.78rem; color: rgba(150,130,110,0.5); margin-top: 20px; }
 
-/* DRAWER */
-.drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 1500; backdrop-filter: blur(4px); }
-.drawer-overlay.open { display: block; }
-.drawer {
-  position: fixed; top: 0; right: -320px; width: 300px; height: 100%;
-  background: linear-gradient(180deg, #1A0800 0%, #0E0500 100%);
-  z-index: 1600; transition: right 0.38s cubic-bezier(0.22,1,0.36,1);
-  border-left: 1px solid rgba(210,180,140,0.15);
-  display: flex; flex-direction: column; overflow-y: auto;
-  box-shadow: -8px 0 40px rgba(0,0,0,0.6);
-}
-.drawer.open { right: 0; }
-.drawer-head { background: linear-gradient(135deg,#280C02,#1A0800); padding: 32px 22px 24px; border-bottom: 1px solid rgba(210,180,140,0.12); position: relative; overflow: hidden; }
-.drawer-head::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(210,180,140,0.3), transparent); }
-.drawer-avatar { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg,var(--tan),var(--tan-dark)); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 900; color: var(--dark); margin-bottom: 14px; border: 2.5px solid rgba(210,180,140,0.35); box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
-.drawer-hi   { font-size: 11px; color: rgba(210,180,140,0.5); letter-spacing: 1px; margin-bottom: 4px; }
-.drawer-name { font-size: 1.2rem; font-weight: 800; color: var(--tan-light); margin-bottom: 10px; }
-.drawer-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; background: rgba(210,180,140,0.12); color: var(--tan); border: 1px solid rgba(210,180,140,0.25); border-radius: 20px; padding: 3px 12px; }
-.drawer-section-title { font-size: 10px; font-weight: 700; letter-spacing: 2px; color: rgba(210,180,140,0.4); padding: 20px 22px 8px; text-transform: uppercase; }
-.drawer-divider { height: 1px; background: rgba(40,12,2,0.4); margin: 6px 22px; }
-.drawer-item { display: flex; align-items: center; gap: 14px; padding: 14px 22px; color: rgba(232,207,168,0.85); font-size: 0.95rem; font-weight: 600; text-decoration: none; border: none; background: none; width: 100%; text-align: right; cursor: pointer; border-right: 3px solid transparent; transition: all 0.2s ease; font-family: 'Cairo',sans-serif; }
-.drawer-item:hover { background: rgba(210,180,140,0.08); border-right-color: var(--tan); color: var(--tan-light); }
-.drawer-item-icon { width: 38px; height: 38px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; border: 1px solid rgba(40,12,2,0.3); transition: all 0.2s; }
-.drawer-item:hover .drawer-item-icon { transform: scale(1.1); }
-.di-c1 { background: rgba(40,12,2,0.3); color: var(--tan); }
-.di-c2 { background: rgba(50,140,70,0.15); color: #70D080; }
-.di-c3 { background: rgba(50,100,200,0.15); color: #70A8F0; }
-.di-c4 { background: rgba(150,60,200,0.15); color: #C080F0; }
-.drawer-item-label { flex: 1; text-align: right; }
-.drawer-item-sub { font-size: 0.75rem; color: rgba(210,180,140,0.45); font-weight: 400; margin-top: 2px; }
-.drawer-arrow { color: rgba(210,180,140,0.35); font-size: 0.85rem; }
-.drawer-logout { margin: auto 22px 28px; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; border-radius: 12px; border: 1px solid rgba(40,12,2,0.5); background: rgba(40,12,2,0.2); color: rgba(210,180,140,0.6); font-size: 0.9rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.2s; font-family: 'Cairo',sans-serif; }
-.drawer-logout:hover { background: rgba(40,12,2,0.35); color: var(--tan-light); }
-
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  :root { --navbar-h: 68px; }
+  :root { --navbar-h: 64px; }
+  .navbar-inner { padding: 10px 16px; }
   .navbar-menu { display: none !important; }
-  .navbar-menu.open { display: flex !important; position: fixed; top: var(--navbar-h); right: 0; left: 0; background: linear-gradient(180deg,#1A0800,#0E0500); flex-direction: column; padding: 24px 20px 32px; gap: 6px; box-shadow: 0 12px 40px rgba(0,0,0,0.5); z-index: 999; animation: slideDown 0.3s ease; }
+  .navbar-menu.open {
+    display: flex !important; position: absolute; top: 100%; right: 0; left: 0;
+    background: linear-gradient(180deg,#1A0800,#0E0500);
+    flex-direction: column; align-items: stretch;
+    padding: 12px 14px 18px; gap: 6px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5); z-index: 999;
+    animation: slideDown 0.3s ease;
+    border-top: 1px solid rgba(210,180,140,0.12);
+  }
+  .navbar-menu.open .nav-link { justify-content: flex-start; padding: 13px 16px; width: 100%; }
+  .nav-auth-mobile.nav-auth-mobile {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-top: 8px; padding-top: 14px;
+    border-top: 1px solid rgba(210,180,140,0.12);
+  }
+  .nav-auth-mobile .nav-btn-login { justify-content: center; padding: 12px 18px; width: 100%; }
   @keyframes slideDown { from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);} }
   .hamburger { display: flex; }
+  .nav-auth-desktop { display: none; }
+  .brand-title { font-size: 1.15rem; }
+  .logo-icon { width: 52px; height: 52px; }
   .exams-grid { grid-template-columns: 1fr; }
   .motive-banner { padding: 40px 24px; }
   .motive-tips { flex-direction: column; align-items: center; }
@@ -386,41 +387,6 @@ ul { list-style: none; }
 </style>
 </head>
 <body>
-
-<!-- DRAWER -->
-<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
-<div class="drawer" id="sideDrawer">
-  <div class="drawer-head">
-    <div class="drawer-avatar" id="drawerAvatar">أ</div>
-    <div class="drawer-hi">مرحباً بك</div>
-    <div class="drawer-name" id="drawerName">اسم الطالب</div>
-    <div class="drawer-badge"><i class="fas fa-circle" style="font-size:6px;color:#4CAF50;"></i> طالب نشط</div>
-  </div>
-  <div class="drawer-section-title">الخدمات</div>
-  <a href="/courses/" class="drawer-item" onclick="closeDrawer()">
-    <div class="drawer-item-icon di-c1"><i class="fas fa-book-open"></i></div>
-    <div class="drawer-item-label"><div>الكورسات</div><div class="drawer-item-sub">تصفح جميع الكورسات</div></div>
-    <i class="fas fa-chevron-left drawer-arrow"></i>
-  </a>
-  <a href="/my-courses/" class="drawer-item" onclick="closeDrawer()">
-    <div class="drawer-item-icon di-c2"><i class="fas fa-graduation-cap"></i></div>
-    <div class="drawer-item-label"><div>كورساتي</div><div class="drawer-item-sub">الكورسات المسجل بها</div></div>
-    <i class="fas fa-chevron-left drawer-arrow"></i>
-  </a>
-  <div class="drawer-divider"></div>
-  <a href="/exams/" class="drawer-item" onclick="closeDrawer()">
-    <div class="drawer-item-icon di-c3"><i class="fas fa-file-alt"></i></div>
-    <div class="drawer-item-label"><div>الامتحانات</div><div class="drawer-item-sub">امتحاناتك القادمة والسابقة</div></div>
-    <i class="fas fa-chevron-left drawer-arrow"></i>
-  </a>
-  <a href="/results/" class="drawer-item" onclick="closeDrawer()">
-    <div class="drawer-item-icon di-c4"><i class="fas fa-trophy"></i></div>
-    <div class="drawer-item-label"><div>النتائج</div><div class="drawer-item-sub">اطلع على نتائجك</div></div>
-    <i class="fas fa-chevron-left drawer-arrow"></i>
-  </a>
-  <div class="drawer-divider"></div>
-  <a href="/logout/" class="drawer-logout"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a>
-</div>
 
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
@@ -437,7 +403,27 @@ ul { list-style: none; }
       <li><a href="/my-courses/" class="nav-link">كورساتي</a></li>
       <li><a href="/exams/"     class="nav-link active">امتحانات</a></li>
       <li><a href="/results/"   class="nav-link">النتائج</a></li>
+
+      <!-- Auth buttons duplicated here so they show inside the mobile dropdown, just like on desktop -->
+      <li class="nav-auth-mobile">
+        {% if user.is_authenticated %}
+          <span class="user-welcome-text">أهلاً بك، {{ user.username }} 👤</span>
+          <a href="{% url 'signout' %}" class="nav-btn-login" style="border-color:rgba(255,99,71,.4);color:#ff6b6b;"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a>
+        {% else %}
+          <a href="{% url 'signin' %}" class="nav-btn-login"><i class="fas fa-arrow-right-to-bracket"></i><span>تسجيل الدخول</span></a>
+        {% endif %}
+      </li>
     </ul>
+    <div class="nav-auth nav-auth-desktop">
+      {% if user.is_authenticated %}
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span class="user-welcome-text">أهلاً بك، {{ user.username }} 👤</span>
+          <a href="{% url 'signout' %}" class="nav-btn-login" style="border-color:rgba(255,99,71,.4);color:#ff6b6b;"><i class="fas fa-sign-out-alt"></i><span>تسجيل الخروج</span></a>
+        </div>
+      {% else %}
+        <a href="{% url 'signin' %}" class="nav-btn-login"><i class="fas fa-arrow-right-to-bracket"></i><span>تسجيل الدخول</span></a>
+      {% endif %}
+    </div>
     <button class="hamburger" id="hamburger" aria-label="Toggle menu">
       <span></span><span></span><span></span>
     </button>
@@ -494,83 +480,33 @@ ul { list-style: none; }
     </div>
 
     <div class="exams-grid">
-      <!-- كارت 1 -->
-      <div class="exam-card reveal" style="transition-delay:0.05s">
-        <div class="exam-card-icon"><i class="fas fa-landmark"></i></div>
-        <div class="exam-card-title">التاريخ المصري القديم</div>
-        <div class="exam-card-meta">
-          <span class="exam-meta-item"><i class="fas fa-question-circle"></i> 30 سؤال</span>
-          <span class="exam-meta-item"><i class="fas fa-clock"></i> 45 دقيقة</span>
-          <span class="exam-meta-item"><i class="fas fa-signal"></i> متوسط</span>
+      {% for exam in exams %}
+      <div class="exam-card reveal" style="transition-delay: 0.05s;">
+        <div class="exam-card-icon">
+          <i class="fas fa-file-alt"></i>
         </div>
-        <div class="exam-status status-available"><i class="fas fa-circle" style="font-size:7px;"></i> متاح الآن</div>
-        <a href="#" class="exam-btn exam-btn-primary"><i class="fas fa-play"></i> ابدأ الامتحان</a>
-      </div>
-
-      <!-- كارت 2 -->
-      <div class="exam-card reveal" style="transition-delay:0.1s">
-        <div class="exam-card-icon"><i class="fas fa-mosque"></i></div>
-        <div class="exam-card-title">التاريخ الإسلامي</div>
+        <div class="exam-card-title">{{ exam.title }}</div>
         <div class="exam-card-meta">
-          <span class="exam-meta-item"><i class="fas fa-question-circle"></i> 25 سؤال</span>
-          <span class="exam-meta-item"><i class="fas fa-clock"></i> 40 دقيقة</span>
-          <span class="exam-meta-item"><i class="fas fa-signal"></i> سهل</span>
+          <span class="exam-meta-item"><i class="fas fa-question-circle"></i> {{ exam.questions_count }} سؤال</span>
+          <span class="exam-meta-item"><i class="fas fa-clock"></i> {{ exam.duration }} دقيقة</span>
+          <span class="exam-meta-item"><i class="fas fa-signal"></i> {{ exam.difficulty }}</span>
         </div>
-        <div class="exam-status status-available"><i class="fas fa-circle" style="font-size:7px;"></i> متاح الآن</div>
-        <a href="#" class="exam-btn exam-btn-primary"><i class="fas fa-play"></i> ابدأ الامتحان</a>
+        
+        {% if exam.is_coming %}
+          <div class="exam-status status-coming"><i class="fas fa-hourglass-half" style="font-size:9px;"></i> قريباً</div>
+          <button class="exam-btn exam-btn-disabled" disabled><i class="fas fa-lock"></i> غير متاح بعد</button>
+        {% else %}
+          <div class="exam-status status-available"><i class="fas fa-circle" style="font-size:7px;"></i> متاح الآن</div>
+          <a href="{% url 'take_exam' exam.id %}" class="exam-btn exam-btn-primary"><i class="fas fa-play"></i> ابدأ الامتحان</a>
+        {% endif %}
       </div>
-
-      <!-- كارت 3 -->
-      <div class="exam-card reveal" style="transition-delay:0.15s">
-        <div class="exam-card-icon"><i class="fas fa-globe-europe"></i></div>
-        <div class="exam-card-title">التاريخ الحديث والمعاصر</div>
-        <div class="exam-card-meta">
-          <span class="exam-meta-item"><i class="fas fa-question-circle"></i> 35 سؤال</span>
-          <span class="exam-meta-item"><i class="fas fa-clock"></i> 50 دقيقة</span>
-          <span class="exam-meta-item"><i class="fas fa-signal"></i> صعب</span>
-        </div>
-        <div class="exam-status status-coming"><i class="fas fa-hourglass-half" style="font-size:9px;"></i> قريباً</div>
-        <button class="exam-btn exam-btn-disabled" disabled><i class="fas fa-lock"></i> غير متاح بعد</button>
+      {% empty %}
+      <div class="coming-card reveal" style="grid-column: 1 / -1; width: 100%;">
+        <span class="coming-icon">⏳</span>
+        <h3 class="coming-title">جاري تحضير الامتحانات الإلكترونية</h3>
+        <p class="coming-text">تابع لوحة التحكم بانتظام، سيقوم الأستاذ أحمد أبو السعود بإضافة الاختبارات فور تفعيلها.</p>
       </div>
-
-      <!-- كارت 4 -->
-      <div class="exam-card reveal" style="transition-delay:0.2s">
-        <div class="exam-card-icon"><i class="fas fa-map-marked-alt"></i></div>
-        <div class="exam-card-title">الجغرافيا السياسية</div>
-        <div class="exam-card-meta">
-          <span class="exam-meta-item"><i class="fas fa-question-circle"></i> 20 سؤال</span>
-          <span class="exam-meta-item"><i class="fas fa-clock"></i> 30 دقيقة</span>
-          <span class="exam-meta-item"><i class="fas fa-signal"></i> متوسط</span>
-        </div>
-        <div class="exam-status status-done"><i class="fas fa-check-circle" style="font-size:9px;"></i> تم الحل — 88%</div>
-        <a href="#" class="exam-btn exam-btn-primary"><i class="fas fa-redo"></i> إعادة الامتحان</a>
-      </div>
-
-      <!-- كارت 5 -->
-      <div class="exam-card reveal" style="transition-delay:0.25s">
-        <div class="exam-card-icon"><i class="fas fa-scroll"></i></div>
-        <div class="exam-card-title">الحضارات القديمة</div>
-        <div class="exam-card-meta">
-          <span class="exam-meta-item"><i class="fas fa-question-circle"></i> 28 سؤال</span>
-          <span class="exam-meta-item"><i class="fas fa-clock"></i> 40 دقيقة</span>
-          <span class="exam-meta-item"><i class="fas fa-signal"></i> متوسط</span>
-        </div>
-        <div class="exam-status status-coming"><i class="fas fa-hourglass-half" style="font-size:9px;"></i> قريباً</div>
-        <button class="exam-btn exam-btn-disabled" disabled><i class="fas fa-lock"></i> غير متاح بعد</button>
-      </div>
-
-      <!-- كارت 6 -->
-      <div class="exam-card reveal" style="transition-delay:0.3s">
-        <div class="exam-card-icon"><i class="fas fa-crown"></i></div>
-        <div class="exam-card-title">امتحان شامل — الترم الأول</div>
-        <div class="exam-card-meta">
-          <span class="exam-meta-item"><i class="fas fa-question-circle"></i> 60 سؤال</span>
-          <span class="exam-meta-item"><i class="fas fa-clock"></i> 90 دقيقة</span>
-          <span class="exam-meta-item"><i class="fas fa-signal"></i> شامل</span>
-        </div>
-        <div class="exam-status status-coming"><i class="fas fa-hourglass-half" style="font-size:9px;"></i> قريباً</div>
-        <button class="exam-btn exam-btn-disabled" disabled><i class="fas fa-lock"></i> غير متاح بعد</button>
-      </div>
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -592,11 +528,18 @@ ul { list-style: none; }
 
 <script>
 const hamburger = document.getElementById('hamburger');
-function openDrawer(){document.getElementById('sideDrawer').classList.add('open');document.getElementById('drawerOverlay').classList.add('open');hamburger.classList.add('active');document.body.style.overflow='hidden';}
-function closeDrawer(){document.getElementById('sideDrawer').classList.remove('open');document.getElementById('drawerOverlay').classList.remove('open');hamburger.classList.remove('active');document.body.style.overflow='';}
-hamburger.addEventListener('click',()=>{document.getElementById('sideDrawer').classList.contains('open')?closeDrawer():openDrawer();});
+const navMenu   = document.getElementById('navMenu');
+
+hamburger.addEventListener('click', () => {
+  navMenu.classList.toggle('open');
+  hamburger.classList.toggle('active');
+});
 
 window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>20);});
+document.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', () => {
+  navMenu.classList.remove('open');
+  hamburger.classList.remove('active');
+}));
 
 const revealObserver = new IntersectionObserver((entries)=>{
   entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible');revealObserver.unobserve(entry.target);}});
