@@ -11,6 +11,7 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
+# ✅ تم تصحيح المسار ليوجه إلى ملف settings الصحيح داخل el_saoud_platform
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.el_saoud_platform.settings')
 
 application = get_wsgi_application()
