@@ -91,6 +91,8 @@ CSRF_COOKIE_SAMESITE = 'Lax'
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 CSRF_TRUSTED_ORIGINS = [
-    'sireltfawq.online',
-    'hsireltfawq.onlinegit add .',
+    'https://sireltfawq.online',
+    'https://*.sireltfawq.online',
+    'https://*.railway.app',
+    'https://*.dokploy.com',
 ]
