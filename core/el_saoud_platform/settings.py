@@ -7,7 +7,7 @@ SECRET_KEY = 'django-insecure-=-&4o(gg&fc64zt9zu5^m+yx^1y8tq*&2as^%77xf3sm^bpfx*
 
 DEBUG = False
 
-# أضف دايماً رابط موقعك هنا برضه
+# السماح لجميع الهوستس بالوصول لتجنب خطأ 400 Bad Request
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
@@ -24,7 +24,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # مكتبة التعامل مع الملفات الثابتة في Production
+    # تفعيل WhiteNoise للتعامل مع الملفات الثابتة عند DEBUG = False
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -34,6 +34,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# مسار الـ URLs الرئيسي للمشروع
 ROOT_URLCONF = 'core.urls'
 
 TEMPLATES = [
@@ -51,9 +52,8 @@ TEMPLATES = [
     },
 ]
 
-# ⚠️ تأكد أن هذا هو المسار الصحيح لملف wsgi.py في مشروعك
-# إذا كان ملف wsgi.py داخل مجلد core مباشرة فاجعله: 'core.wsgi.application'
-WSGI_APPLICATION = 'core.el_saoud_platform.wsgi.application'
+# ✅ تصحيح مسار الـ WSGI القياسي المباشر المتوافق مع Gunicorn / Dokploy
+WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
@@ -74,13 +74,16 @@ TIME_ZONE = 'Africa/Cairo'
 USE_I18N = True
 USE_TZ = True
 
-# إعدادات الملفات الثابتة
+# إعدادات الملفات الثابتة (Static Files)
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
+
+# التأكد من عدم حدوث Error لو مجلد static مش موجود في الجهاز محلياً
+STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else []
+
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# تفعيل ضغط وحفظ الملفات الثابتة بواسطة WhiteNoise
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# استبدال Storage الضغط بـ WhiteNoise القياسي لتفادي إيقاف السيرفر لو ملف CSS مفقود
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -94,4 +97,8 @@ CSRF_COOKIE_SAMESITE = 'Lax'
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
-CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']
+# إضافة حماية CSRF لجميع النطاقات الخاصة بـ Dokploy و Railway
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.railway.app',
+    'https://*.dokploy.com',
+]
