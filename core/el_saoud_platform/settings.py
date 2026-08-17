@@ -6,8 +6,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-=-&4o(gg&fc64zt9zu5^m+yx^1y8tq*&2as^%77xf3sm^bpfx*'
 
 # حطينا True وكمان ملّينا الـ ALLOWED_HOSTS عشان نقتل الخطأ تماماً
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = [
+    'https://sireltfawq.online',       # شيل ده وحط دومين المنصة بتاعك
+    'https://sireltfawq.online',   # لو عندك www ضيفها برضه
+]
 
 INSTALLED_APPS = [
     "unfold",
