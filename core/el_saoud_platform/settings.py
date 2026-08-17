@@ -1,13 +1,12 @@
 from pathlib import Path
 import os
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = 'django-insecure-=-&4o(gg&fc64zt9zu5^m+yx^1y8tq*&2as^%77xf3sm^bpfx*'
 
 DEBUG = True
 
-# السماح لجميع الهوستس بالوصول لتجنب خطأ 400 Bad Request
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
@@ -24,7 +23,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # تفعيل WhiteNoise للتعامل مع الملفات الثابتة عند DEBUG = False
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -34,8 +32,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# مسار الـ URLs الرئيسي للمشروع
-ROOT_URLCONF = 'core.urls'
+# ✅ تصحيح مسار الـ URLs ليطابق هيكل el_saoud_platform
+ROOT_URLCONF = 'core.el_saoud_platform.urls'
 
 TEMPLATES = [
     {
@@ -52,8 +50,8 @@ TEMPLATES = [
     },
 ]
 
-# ✅ تصحيح مسار الـ WSGI القياسي المباشر المتوافق مع Gunicorn / Dokploy
-WSGI_APPLICATION = 'core.wsgi.application'
+# ✅ تصحيح مسار الـ WSGI ليطابق المكان الحقيقي لملف wsgi.py
+WSGI_APPLICATION = 'core.el_saoud_platform.wsgi.application'
 
 DATABASES = {
     'default': {
@@ -74,15 +72,10 @@ TIME_ZONE = 'Africa/Cairo'
 USE_I18N = True
 USE_TZ = True
 
-# إعدادات الملفات الثابتة (Static Files)
 STATIC_URL = '/static/'
-
-# التأكد من عدم حدوث Error لو مجلد static مش موجود في الجهاز محلياً
 STATICFILES_DIRS = [BASE_DIR / "static"] if (BASE_DIR / "static").exists() else []
-
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# استبدال Storage الضغط بـ WhiteNoise القياسي لتفادي إيقاف السيرفر لو ملف CSS مفقود
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
 
 MEDIA_URL = '/media/'
@@ -97,8 +90,7 @@ CSRF_COOKIE_SAMESITE = 'Lax'
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
-# إضافة حماية CSRF لجميع النطاقات الخاصة بـ Dokploy و Railway
 CSRF_TRUSTED_ORIGINS = [
-    'https://*.railway.app',
-    'https://*.dokploy.com',
+    'sireltfawq.online',
+    'hsireltfawq.onlinegit add .',
 ]
