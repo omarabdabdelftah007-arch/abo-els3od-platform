@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-=-&4o(gg&fc64zt9zu5^m+yx^1y8tq*&2as^%77xf3sm^bpfx*'
 
 # حطينا True وكمان ملّينا الـ ALLOWED_HOSTS عشان نقتل الخطأ تماماً
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [

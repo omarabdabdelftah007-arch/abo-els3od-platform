@@ -60,7 +60,6 @@ ul { list-style:none; }
 .nav-btn-login:hover { background:rgba(210,180,140,.12); border-color:rgba(210,180,140,.55); color:#fff; }
 .user-welcome-text { color:var(--tan-light); font-family:'Cairo',sans-serif; font-size:.9rem; font-weight:700; white-space:nowrap; }
 
-/* Auth buttons duplicated inside the mobile menu — hidden on desktop, only shown when the mobile dropdown is open */
 .nav-auth-mobile { display:none; }
 
 .hamburger { display:none; flex-direction:column; gap:5px; background:rgba(210,180,140,0.12); border:1px solid rgba(210,180,140,0.2); border-radius:10px; padding:8px; cursor:pointer; }
@@ -82,6 +81,55 @@ ul { list-style:none; }
 
 /* ══ DASHBOARD CONTENT ══ */
 .dashboard-wrap { max-width:1100px; margin:0 auto; padding:48px 28px 80px; }
+
+/* 💳 USER INFO CARD */
+.user-profile-card {
+  background: #fff;
+  border: 1px solid rgba(40,12,2,.1);
+  border-radius: 20px;
+  padding: 26px 28px;
+  margin-bottom: 36px;
+  box-shadow: 0 4px 20px rgba(40,12,2,.05);
+  animation: fadeUp .6s cubic-bezier(.22,1,.36,1) both;
+}
+.profile-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--dark);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(210,180,140,.3);
+}
+.profile-card-header i {
+  color: var(--primary-light);
+  font-size: 1.3rem;
+}
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+.info-box {
+  background: var(--cream);
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(210,180,140,.3);
+}
+.info-box-label {
+  display: block;
+  font-size: .78rem;
+  font-weight: 700;
+  color: #888;
+  margin-bottom: 4px;
+}
+.info-box-value {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--dark);
+}
 
 /* Gauges */
 .gauges-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:22px; margin-bottom:40px; }
@@ -173,6 +221,7 @@ td:first-child { text-align:right; font-weight:700; white-space:normal; }
   .page-hero { padding:40px 18px 36px; }
   table { font-size:.82rem; }
   th, td { padding:12px 12px; }
+  .profile-grid { grid-template-columns: 1fr; gap: 12px; }
 }
   </style>
 </head>
@@ -185,16 +234,15 @@ td:first-child { text-align:right; font-weight:700; white-space:normal; }
       <div class="logo-icon">
         <img src="/static/images/logo.png" alt="لوجو" onerror="this.parentElement.style.background='rgba(210,180,140,.15)'"/>
       </div>
-      <span class="brand-title">منصة التفوق في التاريخ</span>
+      <span class="brand-title">منصة سر التفوق في التاريخ</span>
     </div>
     <ul class="navbar-menu" id="navMenu">
-      <li><a href="{% url 'home' %}"  class="nav-link">الرئيسية</a></li>
+      <li><a href="{% url 'home' %}"   class="nav-link">الرئيسية</a></li>
       <li><a href="/courses/"         class="nav-link">كورسات</a></li>
       <li><a href="/my-courses/"      class="nav-link">كورساتي</a></li>
       <li><a href="/exams/"           class="nav-link">امتحانات</a></li>
-      <li><a href="/results/"         class="nav-link active">النتائج</a></li>
+      <li><a href="/results/"         class="nav-link active">معلوماتي</a></li>
 
-      <!-- Auth buttons duplicated here so they show inside the mobile dropdown, just like on desktop -->
       <li class="nav-auth-mobile">
         {% if user.is_authenticated %}
           <span class="user-welcome-text">أهلاً بك، {{ user.username }} 👤</span>
@@ -221,14 +269,69 @@ td:first-child { text-align:right; font-weight:700; white-space:normal; }
 <!-- PAGE HERO -->
 <div class="page-hero">
   <div class="page-hero-inner">
-    <div class="page-hero-tag">لوحة النتائج</div>
+    <div class="page-hero-tag">معلومات الحساب والنتائج</div>
     <h1 class="page-hero-title">متابعة <span>تقدمك الأكاديمي</span></h1>
-    <p class="page-hero-sub">تابع نسبة إنجازك وأداءك في الكورسات والامتحانات بشكل تفصيلي</p>
+    <p class="page-hero-sub">تابع بياناتك المسجلة ونسبة إنجازك وأداءك في الكورسات والامتحانات بشكل تفصيلي</p>
   </div>
 </div>
 
 <!-- DASHBOARD -->
 <div class="dashboard-wrap">
+
+  <!-- 💳 كارت بيانات الطالب الشخصية -->
+  <div class="user-profile-card">
+    <div class="profile-card-header">
+      <i class="fas fa-id-card"></i>
+      <span>البيانات الشخصية والأكاديمية</span>
+    </div>
+    <div class="profile-grid">
+      
+      <!-- الاسم بالكامل -->
+      <div class="info-box">
+        <span class="info-box-label">الاسم بالكامل:</span>
+        <div class="info-box-value">
+          {{ user.username }}
+        </div>
+      </div>
+
+      <!-- رقم الهاتف -->
+      <div class="info-box">
+        <span class="info-box-label">رقم الهاتف:</span>
+        <div class="info-box-value">
+          {% if profile and profile.phone %}
+            {{ profile.phone }}
+          {% else %}
+            غير مسجل
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- الصف الدراسي -->
+      <div class="info-box">
+        <span class="info-box-label">الصف الدراسي:</span>
+        <div class="info-box-value" style="color:var(--primary-light);">
+          {% if profile and profile.grade %}
+            {{ profile.get_grade_display }}
+          {% else %}
+            غير محدد
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- النظام التعليمي -->
+      <div class="info-box">
+        <span class="info-box-label">النظام التعليمي:</span>
+        <div class="info-box-value" style="color:var(--primary-light);">
+          {% if profile and profile.system %}
+            {{ profile.get_system_display }}
+          {% else %}
+            عام
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
 
   <!-- GAUGES -->
   <div class="gauges-grid">
@@ -303,7 +406,7 @@ td:first-child { text-align:right; font-weight:700; white-space:normal; }
           <td>{{ result.attended_lessons }}</td>
           <td>{{ result.remaining_lessons }}</td>
           <td>
-            {% if result.status == 'completed' or result.is_finished %}
+            {% if result.status == 'مكتمل' or result.status == 'completed' or result.is_finished %}
               <span class="badge status-completed"><i class="fas fa-check-circle" style="font-size:.7rem;"></i> مكتمل</span>
             {% else %}
               <span class="badge status-ongoing"><i class="fas fa-spinner" style="font-size:.7rem;"></i> جاري</span>

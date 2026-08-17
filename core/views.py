@@ -3,7 +3,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
-from .models import StudentProfile, GRADE_CHOICES, TopStudent, Exam, StudentResult, Month, Subscription, Lecture
+from .models import (
+    StudentProfile, GRADE_CHOICES, SYSTEM_CHOICES, TopStudent, 
+    Exam, StudentResult, Month, Subscription, Lecture
+)
 import re
 
 
@@ -23,7 +26,8 @@ def signup_view(request):
         if User.objects.filter(username=full_name).exists():
             return render(request, 'signup.html', {
                 'error': 'اسم الطالب هذا مسجل بالفعل، يرجى كتابة اسمك ثلاثي أو رباعي!',
-                'grades': GRADE_CHOICES
+                'grades': GRADE_CHOICES,
+                'systems': SYSTEM_CHOICES,
             })
 
         try:
@@ -41,10 +45,14 @@ def signup_view(request):
         except Exception:
             return render(request, 'signup.html', {
                 'error': 'حدث خطأ أثناء حفظ البيانات، يرجى المحاولة مرة أخرى.',
-                'grades': GRADE_CHOICES
+                'grades': GRADE_CHOICES,
+                'systems': SYSTEM_CHOICES,
             })
 
-    return render(request, 'signup.html', {'grades': GRADE_CHOICES})
+    return render(request, 'signup.html', {
+        'grades': GRADE_CHOICES,
+        'systems': SYSTEM_CHOICES,
+    })
 
 
 # ══════════════════════════════════════════════
@@ -52,9 +60,20 @@ def signup_view(request):
 # ══════════════════════════════════════════════
 def signin_view(request):
     if request.method == 'POST':
-        username = request.POST.get('username')
+        username_input = request.POST.get('username', '').strip()
         password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
+
+        # 🌟 لو الطالب كتب رقم تليفون (كل الحروف أرقام)، هنستخرج اسم المستخدم المربوط برقمه
+        if username_input.isdigit():
+            try:
+                profile = StudentProfile.objects.filter(phone=username_input).first()
+                if profile:
+                    username_input = profile.user.username
+            except Exception:
+                pass
+
+        # نمرر اسم المستخدم (سواء كتبه مباشر أو جبناه عن طريق رقم الفون)
+        user = authenticate(request, username=username_input, password=password)
 
         if user is not None:
             if user.is_active:
@@ -66,7 +85,7 @@ def signin_view(request):
                 })
         else:
             return render(request, 'signin.html', {
-                'error': 'اسم المستخدم أو كلمة المرور غير صحيحة!'
+                'error': 'اسم المستخدم/رقم الهاتف أو كلمة المرور غير صحيحة!'
             })
 
     return render(request, 'signin.html')
@@ -164,35 +183,30 @@ def courses_list_view(request):
 
 
 # ══════════════════════════════════════════════
-# 6. صفحة كورساتي — (معدلة لجلب الشهور والمحاضرات الفردية)
+# 6. صفحة كورساتي
 # ══════════════════════════════════════════════
 @login_required(login_url='signin')
 def my_courses_view(request):
-    # جلب جميع الاشتراكات النشطة للطالب (كورسات ومحاضرات فردية)
     all_subscriptions = Subscription.objects.filter(student=request.user, is_active=True).select_related('month', 'lecture')
     
-    # فصل اشتراكات الشهور الكاملة
     month_subscriptions = all_subscriptions.filter(month__isnull=False).order_by('month__grade', 'month__title')
-    
-    # فصل اشتراكات المحاضرات الفردية
     individual_subscriptions = all_subscriptions.filter(lecture__isnull=False).order_by('lecture__created_at')
 
     return render(request, 'my-courses.html', {
-        'subscriptions': month_subscriptions,                         # الشهور الكاملة
-        'individual_subscriptions': individual_subscriptions,         # المحاضرات الفردية الجديدة
+        'subscriptions': month_subscriptions,
+        'individual_subscriptions': individual_subscriptions,
         'total_subscribed': month_subscriptions.count() + individual_subscriptions.count(),
     })
 
 
 # ══════════════════════════════════════════════
-# 7. صفحة مشاهدة كورس معين — (معدلة لدعم صلاحيات المحاضرة الفردية)
+# 7. صفحة مشاهدة كورس معين
 # ══════════════════════════════════════════════
 @login_required(login_url='signin')
 def course_watch(request, month_id):
     month = get_object_or_404(Month, id=month_id)
     lecture_id = request.GET.get('lecture')
     
-    # 1. التحقق من الوصول للكورس بالكامل
     has_month_access = Subscription.objects.filter(
         student=request.user,
         month=month,
@@ -201,10 +215,8 @@ def course_watch(request, month_id):
 
     current_lecture = None
     
-    # 2. لو الطالب مش مشترك في الشهر، نتحقق لو عنده اشتراك فردي للمحاضرة المطلوبة
     if not has_month_access:
         if lecture_id:
-            # نتحقق لو المحاضرة المطلوبة مفعّلة له بشكل فردي
             has_lecture_access = Subscription.objects.filter(
                 student=request.user,
                 lecture_id=lecture_id,
@@ -214,23 +226,18 @@ def course_watch(request, month_id):
             if has_lecture_access:
                 current_lecture = Lecture.objects.filter(id=lecture_id, month=month).first()
         
-        # لو ملوش صلاحية للشهر كله ولا للمحاضرة دي بالتحديد، اطرده بره
         if not current_lecture:
             return redirect('my_courses')
 
-    # 3. جلب المحاضرات المتاحة للطالب للعرض في القائمة الجانبية
     if has_month_access:
-        # لو مشترك في الشهر كله يشوف كل المحاضرات عادي
         lectures = month.lectures.all().order_by('order', 'id')
         if lecture_id:
             current_lecture = lectures.filter(id=lecture_id).first()
         if not current_lecture and lectures.exists():
             current_lecture = lectures.first()
     else:
-        # لو داخل بمحاضرة فردية، القائمة الجانبية هتعرض المحاضرة دي بس عشان نمنع تصفحه لباقي المحاضرات
         lectures = Lecture.objects.filter(id=current_lecture.id)
 
-    # 4. إيجاد المحاضرة السابقة والتالية (تعمل فقط لو مشترك بالشهر بالكامل)
     lectures_list = list(lectures)
     prev_lecture  = None
     next_lecture  = None
@@ -251,7 +258,7 @@ def course_watch(request, month_id):
         'prev_lecture'    : prev_lecture,
         'next_lecture'    : next_lecture,
         'total'           : lectures.count(),
-        'has_month_access': has_month_access, # نمررها للـ HTML عشان لو فردي نخفي أزرار التالي والسابق
+        'has_month_access': has_month_access,
     }
     return render(request, 'course_watch.html', context)
 
@@ -281,12 +288,53 @@ def exams_view(request):
 
 
 # ══════════════════════════════════════════════
-# 9. صفحة النتائج (Dashboard)
+# 9. صفحة النتائج (Dashboard) — مع ترجمة الأنظمة والصفوف للعربي
 # ══════════════════════════════════════════════
 @login_required(login_url='signin')
 def results_view(request):
     user_results = StudentResult.objects.filter(student=request.user)
 
+    try:
+        profile = StudentProfile.objects.get(user=request.user)
+    except StudentProfile.DoesNotExist:
+        profile = None
+
+    # قواميس ترجمة جميع قيم النظام التعليمي والصف الدراسي إلى اللغة العربية
+    SYSTEM_MAP = {
+        'general': 'عام',
+        'General': 'عام',
+        'azhari': 'أزهري',
+        'Azhari': 'أزهري',
+        'baccalaureate': 'بكالوريا',
+        'Baccalaureate': 'بكالوريا',
+        'bac': 'بكالوريا',
+        'عام': 'عام',
+        'أزهري': 'أزهري',
+        'بكالوريا': 'بكالوريا',
+    }
+
+    GRADE_MAP = {
+        '1': 'الصف الثاني الثانوي',
+        '2': 'الصف الثالث الثانوي',
+        '2sec': 'الصف الثاني الثانوي',
+        '3sec': 'الصف الثالث الثانوي',
+    }
+
+    grade_ar = "غير محدد"
+    system_ar = "غير محدد"
+
+    if profile:
+        # ترجمة الصف الدراسي
+        if profile.grade:
+            raw_grade = str(profile.grade).strip()
+            grade_ar = GRADE_MAP.get(raw_grade, profile.get_grade_display() or raw_grade)
+
+        # ترجمة النظام التعليمي
+        if profile.system:
+            raw_system = str(profile.system).strip().lower()
+            system_ar = SYSTEM_MAP.get(raw_system, SYSTEM_MAP.get(str(profile.system).strip(), profile.get_system_display() or profile.system))
+
+    # الحسابات الإحصائية
     total_attended = sum(r.attended_lessons for r in user_results)
     total_lessons  = sum(r.attended_lessons + r.remaining_lessons for r in user_results)
     course_view_percentage = int(total_attended / total_lessons * 100) if total_lessons > 0 else 0
@@ -315,6 +363,9 @@ def results_view(request):
     gpa_percentage = int(total_scores / score_count) if score_count > 0 else 0
 
     context = {
+        'profile'                   : profile,
+        'grade_ar'                  : grade_ar,
+        'system_ar'                 : system_ar,
         'results'                   : user_results,
         'course_view_percentage'    : course_view_percentage,
         'exam_completion_percentage': exam_completion_percentage,
@@ -331,7 +382,7 @@ def _get_student_grade(user):
         return user.studentprofile.grade
     except StudentProfile.DoesNotExist:
         return '1'
-    
+
 
 @login_required
 def take_exam_view(request, exam_id):
@@ -349,7 +400,7 @@ def take_exam_view(request, exam_id):
             
             if student_choice:
                 student_choice = int(student_choice)
-                is_correct= (str(student_choice).strip() == str(question.correct_answer).strip())
+                is_correct = (str(student_choice).strip() == str(question.correct_answer).strip())
                 if is_correct:
                     correct_answers_count += 1
                 
@@ -359,7 +410,6 @@ def take_exam_view(request, exam_id):
                 }
 
         score_percentage = (correct_answers_count / total_questions) * 100 if total_questions > 0 else 0
-        student_status = 'ناجح' if score_percentage >= 50 else 'راسب'
 
         StudentResult.objects.create(
             student=request.user,
@@ -408,11 +458,12 @@ def exam_result_view(request, exam_id):
         'questions_with_answers': questions_with_answers,
     }
     return render(request, 'exam_result.html', context)
+
+
 @login_required(login_url='signin')
 def enroll_free_course_view(request, month_id):
     month = get_object_or_404(Month, id=month_id)
     
-    # 1. نتأكد الأول إن الطالب مش مشترك في الكورس ده قبل كده (عشان نمنع التكرار)
     already_subscribed = Subscription.objects.filter(
         student=request.user, 
         month=month, 
@@ -420,20 +471,14 @@ def enroll_free_course_view(request, month_id):
     ).exists()
     
     if already_subscribed:
-        # لو مشترك فعلاً، واديه لصفحة مشاهدة الكورس علطول
         return redirect('course_watch', month_id=month.id)
     
-    # 🌟 2. السحر كله هنا: نتحقق إن الكورس مجاني فعلاً (سعره 0)
-    # (تأكد إن عندك حقل السعر اسمه price جوه موديل Month)
     if hasattr(month, 'price') and month.price == 0:
-        # بنعمل سطر اشتراك جديد ومفعّل للطالب فوراً أوتوماتيك!
         Subscription.objects.create(
             student=request.user,
             month=month,
             is_active=True
         )
-        # واديه لصفحة مشاهدة الكورس علطول وهو مبسوط
         return redirect('course_watch', month_id=month.id)
     else:
-        # لو طلع بفلوس والمستر غير سعره، بنرجعه لصفحة الكورسات ويظهر له تنبيه
         return redirect('courses_list')

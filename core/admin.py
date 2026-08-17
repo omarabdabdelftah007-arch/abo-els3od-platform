@@ -38,31 +38,40 @@ class StudentProfileInline(StackedInline):
 
 
 # ══════════════════════════════════════════════
-# 4. اشتراكات الطالب (Inline جوه User) - معدل ليدعم المحاضرة الفردية
+# 4. اشتراكات الطالب (Inline جوه User)
 # ══════════════════════════════════════════════
 class SubscriptionInline(TabularInline):
     model         = Subscription
     extra         = 1
-    fields        = ('month', 'lecture', 'is_active', 'subscribed_at')  # إضافة حقل المحاضرة الفردية هنا
+    fields        = ('month', 'lecture', 'is_active', 'subscribed_at')
     readonly_fields = ('subscribed_at',)
     verbose_name  = "اشتراك الطالب"
 
 
 # ══════════════════════════════════════════════
-# 5. لوحة تحكم Users
+# 5. لوحة تحكم Users (تم إضافة عرض وفلترة النظام التعليمي)
 # ══════════════════════════════════════════════
 admin.site.unregister(User)
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin, ModelAdmin):
     inlines      = (StudentProfileInline, SubscriptionInline)
-    list_display = ('username', 'get_phone', 'get_grade', 'get_active_subs', 'is_active', 'is_staff')
-    search_fields = ('username', 'studentprofile__phone')
-    list_filter  = ('is_active', 'is_staff', 'studentprofile__grade')
+    list_display = ('username', 'get_full_name_custom', 'get_phone', 'get_grade', 'get_system', 'get_active_subs', 'is_active', 'is_staff')
+    
+    # ✅ إمكانية البحث بـ: اسم المستخدم، الاسم الأول، الاسم الأخير، ورقم الهاتف
+    search_fields = ('username', 'first_name', 'last_name', 'studentprofile__phone')
+    
+    # ✅ إضافة الفلترة بالنظام التعليمي والصف لتفادي خطأ الـ Lookup
+    list_filter   = ('is_active', 'is_staff', 'studentprofile__grade', 'studentprofile__system')
+
+    def get_full_name_custom(self, obj):
+        full_name = obj.get_full_name()
+        return full_name if full_name else "—"
+    get_full_name_custom.short_description = "الاسم بالكامل"
 
     def get_phone(self, obj):
         try:
-            return obj.studentprofile.phone
+            return obj.studentprofile.phone or "—"
         except Exception:
             return "—"
     get_phone.short_description = "التليفون"
@@ -73,6 +82,13 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
         except Exception:
             return "—"
     get_grade.short_description = "الصف"
+
+    def get_system(self, obj):
+        try:
+            return obj.studentprofile.get_system_display()
+        except Exception:
+            return "—"
+    get_system.short_description = "النظام التعليمي"
 
     def get_active_subs(self, obj):
         count = obj.subscriptions.filter(is_active=True).count()
@@ -86,7 +102,7 @@ class UserAdmin(BaseUserAdmin, ModelAdmin):
 class LectureInline(TabularInline):
     model   = Lecture
     extra   = 1
-    fields  = ('title', 'order', 'video_url', 'pdf_file', 'is_individual')  # إضافة الحقل هنا ليسهل تفعيله فوراً
+    fields  = ('title', 'order', 'video_url', 'pdf_file', 'is_individual')
     ordering = ('order',)
 
 
@@ -121,12 +137,12 @@ class LectureAdmin(ModelAdmin):
     list_display  = ('title', 'month', 'order', 'is_individual', 'created_at')
     list_filter   = ('month', 'month__grade', 'is_individual')
     search_fields = ('title',)
-    list_editable = ('is_individual',)  # تتيح للمدرس قلب المحاضرة لفردية من الجدول مباشرة
+    list_editable = ('is_individual',)
     ordering      = ('month', 'order')
 
 
 # ══════════════════════════════════════════════
-# 8. اشتراكات الطلاب - معدل بالكامل للمرونة
+# 8. اشتراكات الطلاب
 # ══════════════════════════════════════════════
 @admin.action(description="✅ تفعيل الاشتراكات المحددة")
 def activate_subscriptions(modeladmin, request, queryset):
@@ -138,13 +154,27 @@ def deactivate_subscriptions(modeladmin, request, queryset):
 
 @admin.register(Subscription)
 class SubscriptionAdmin(ModelAdmin):
-    list_display  = ('student', 'get_subscription_target', 'is_active', 'subscribed_at')
+    list_display  = ('student', 'get_student_phone', 'get_subscription_target', 'is_active', 'subscribed_at')
     list_filter   = ('is_active', 'month', 'lecture', 'month__grade')
-    search_fields = ('student__username', 'month__title', 'lecture__title')
+    
+    search_fields = (
+        'student__username', 
+        'student__first_name', 
+        'student__last_name', 
+        'student__studentprofile__phone', 
+        'month__title', 
+        'lecture__title'
+    )
     list_editable = ('is_active',)
     actions       = [activate_subscriptions, deactivate_subscriptions]
 
-    # دالة ذكية لعرض نوع الاشتراك (شهر كامل أم محاضرة فردية) في الجدول بشكل منسق
+    def get_student_phone(self, obj):
+        try:
+            return obj.student.studentprofile.phone or "—"
+        except Exception:
+            return "—"
+    get_student_phone.short_description = "رقم الهاتف"
+
     def get_subscription_target(self, obj):
         if obj.lecture:
             return f"🎥 محاضرة فردية: {obj.lecture.title}"
@@ -159,11 +189,25 @@ class SubscriptionAdmin(ModelAdmin):
 # ══════════════════════════════════════════════
 @admin.register(StudentResult)
 class StudentResultAdmin(ModelAdmin):
-    list_display  = ('student', 'course_name', 'score', 'status', 'attended_lessons')
+    list_display  = ('student', 'get_student_phone', 'course_name', 'score', 'status', 'attended_lessons')
     list_filter   = ('status',)
-    search_fields = ('student__username', 'course_name')
+    
+    search_fields = (
+        'student__username', 
+        'student__first_name', 
+        'student__last_name', 
+        'student__studentprofile__phone', 
+        'course_name'
+    )
     list_editable = ('score', 'status')
     ordering      = ('-score',)
+
+    def get_student_phone(self, obj):
+        try:
+            return obj.student.studentprofile.phone or "—"
+        except Exception:
+            return "—"
+    get_student_phone.short_description = "رقم الهاتف"
 
 
 # ══════════════════════════════════════════════

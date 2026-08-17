@@ -3,18 +3,23 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-# 1. خيارات الصفوف الدراسية
-GRADE_CHOICES = [
+# 1. خيارات الصفوف الدراسية والنظم التعليمية
+GRADE_CHOICES = (
     ('1', 'الصف الثاني الثانوي'),
     ('2', 'الصف الثالث الثانوي'),
-]
+)
 
+SYSTEM_CHOICES = (
+    ('general', 'عام'),
+    ('azhari', 'أزهري'),
+    ('baccalaureate', 'بكالوريا'),
+)
 # 2. بروفايل الطالب
 class StudentProfile(models.Model):
     user         = models.OneToOneField(User, on_delete=models.CASCADE, related_name='studentprofile')
     phone        = models.CharField(max_length=15, verbose_name="رقم تليفون الطالب")
     parent_phone = models.CharField(max_length=15, blank=True, null=True, verbose_name="رقم تليفون ولي الأمر")
-    system       = models.CharField(max_length=20, default='general', verbose_name="النظام التعليمي")
+    system       = models.CharField(max_length=20, choices=SYSTEM_CHOICES, default='general', verbose_name="النظام التعليمي")
     governorate  = models.CharField(max_length=50, blank=True, null=True, verbose_name="المحافظة")
     grade        = models.CharField(max_length=1, choices=GRADE_CHOICES, default='1', verbose_name="الصف الدراسي")
     streak       = models.IntegerField(default=0, verbose_name="أيام متتالية")
@@ -70,7 +75,6 @@ class Lecture(models.Model):
     def __str__(self):
         return self.title
 
-    # تم تصحيح مكان الدالة وإزاحتها لتكون تابعة للكلاس بشكل سليم
     def get_embed_url(self):
         if not self.video_url:
             return ""
@@ -85,23 +89,17 @@ class Lecture(models.Model):
         return self.video_url
 
 
-# 5. اشتراكات الطلاب (معدل ليدعم الاشتراك في كورس كامل أو محاضرة فردية)
+# 5. اشتراكات الطلاب
 class Subscription(models.Model):
     student       = models.ForeignKey(User, on_delete=models.CASCADE, related_name='subscriptions', verbose_name="الطالب")
-    
-    # جعلنا الكورس اختياري ليتيح حجز محاضرة فردية فقط بدون حجز الشهر بالكامل
     month         = models.ForeignKey(Month, on_delete=models.CASCADE, blank=True, null=True, related_name='subscriptions', verbose_name="الكورس المشترك فيه")
-    
-    # الحقل الجديد لربط الاشتراك بمحاضرة فردية معينة
     lecture       = models.ForeignKey(Lecture, on_delete=models.CASCADE, blank=True, null=True, related_name='subscriptions', verbose_name="المحاضرة الفردية (اختياري)")
-    
     is_active     = models.BooleanField(default=False, verbose_name="مفعّل؟")
     subscribed_at = models.DateTimeField(auto_now_add=True, verbose_name="تاريخ الاشتراك")
 
     class Meta:
         verbose_name        = "اشتراك"
         verbose_name_plural = "💳 اشتراكات الطلاب"
-        # تم إزالة unique_together القديمة لأن الطالب يمكنه حجز أكثر من محاضرة فردية مختلفة تابعة لنفس الكورس
 
     def __str__(self):
         status = "✅" if self.is_active else "⏳"
