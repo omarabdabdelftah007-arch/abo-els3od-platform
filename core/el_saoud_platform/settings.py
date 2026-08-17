@@ -32,7 +32,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# ✅ تصحيح مسار الـ URLs ليطابق هيكل el_saoud_platform
 ROOT_URLCONF = 'core.el_saoud_platform.urls'
 
 TEMPLATES = [
@@ -50,13 +49,13 @@ TEMPLATES = [
     },
 ]
 
-# ✅ تصحيح مسار الـ WSGI ليطابق المكان الحقيقي لملف wsgi.py
 WSGI_APPLICATION = 'core.el_saoud_platform.wsgi.application'
 
+# ✅ تغيير اسم القاعدة لإجبار Django على إنشاء قاعدة جديدة ونظيفة
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'production_db_v2.sqlite3',
     }
 }
 
@@ -95,4 +94,5 @@ CSRF_TRUSTED_ORIGINS = [
     'https://*.sireltfawq.online',
     'https://*.railway.app',
     'https://*.dokploy.com',
+    'http://sireltfawq.online',
 ]
