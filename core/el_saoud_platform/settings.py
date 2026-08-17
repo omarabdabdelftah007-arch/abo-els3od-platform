@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-=-&4o(gg&fc64zt9zu5^m+yx^1y8tq*&2as^%77xf3sm^bpfx*'
 
-DEBUG = False
+DEBUG = True
 
 # السماح لجميع الهوستس بالوصول لتجنب خطأ 400 Bad Request
 ALLOWED_HOSTS = ['*']
