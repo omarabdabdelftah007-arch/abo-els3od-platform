@@ -5,13 +5,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-=-&4o(gg&fc64zt9zu5^m+yx^1y8tq*&2as^%77xf3sm^bpfx*'
 
-# حطينا True وكمان ملّينا الـ ALLOWED_HOSTS عشان نقتل الخطأ تماماً
-DEBUG = True
+DEBUG = False
+
+# أضف دايماً رابط موقعك هنا برضه
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = [
-    'https://sireltfawq.online',       # شيل ده وحط دومين المنصة بتاعك
-    'https://sireltfawq.online',   # لو عندك www ضيفها برضه
-]
 
 INSTALLED_APPS = [
     "unfold",
@@ -27,6 +24,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # مكتبة التعامل مع الملفات الثابتة في Production
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -52,6 +51,8 @@ TEMPLATES = [
     },
 ]
 
+# ⚠️ تأكد أن هذا هو المسار الصحيح لملف wsgi.py في مشروعك
+# إذا كان ملف wsgi.py داخل مجلد core مباشرة فاجعله: 'core.wsgi.application'
 WSGI_APPLICATION = 'core.el_saoud_platform.wsgi.application'
 
 DATABASES = {
@@ -73,24 +74,24 @@ TIME_ZONE = 'Africa/Cairo'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+# إعدادات الملفات الثابتة
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# تفعيل ضغط وحفظ الملفات الثابتة بواسطة WhiteNoise
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# إعدادات حماية الـ Cookies والسماح لليوتيوب بالتشغيل على الـ Localhost
 SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
 
-# السماح للمتصفح بإرسال ملفات تعريف الارتباط للمواقع الخارجية (مثل يوتيوب) أثناء التطوير
 SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SAMESITE = 'Lax'
 
-# تفعيل الـ Clickjacking Protection مع السماح بالـ iframes الخارجية
 X_FRAME_OPTIONS = 'SAMEORIGIN'
-
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 CSRF_TRUSTED_ORIGINS = ['https://*.railway.app']
