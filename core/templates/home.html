@@ -1,26 +1,19 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  
-  <!-- SEO & Keywords -->
-  <title>منصة سر التفوق في التاريخ | شرح ومراجعات امتحانات الثانوية العامة</title>
-  <meta name="description" content="منصة سر التفوق التعليمية المتخصصة في تدريس مادة التاريخ للثانوية العامة. فيديوهات شرح مبسطة، امتحانات أونلاين، ومراجعات نهائية طبقاً للنظام الحديث."/>
-  <meta name="keywords" content="منصة سر التفوق, تاريخ ثانوية عامة, شرح تاريخ الصف الثالث الثانوي, امتحانات تاريخ أونلاين, مراجعة تاريخ ثانوية عامة, سر التفوق في التاريخ, كورسات تاريخ, الأستاذ في التاريخ, الصف الأول الثانوي تاريخ, الصف الثاني الثانوي تاريخ"/>
-  <meta name="robots" content="index, follow"/>
-  
-  <!-- Social Media Metadata (Open Graph) -->
-  <meta property="og:title" content="منصة سر التفوق في التاريخ"/>
-  <meta property="og:description" content="اقوى منصة تعليمية لشرح ومراجعات مادة التاريخ للثانوية العامة بالنظام الحديث."/>
-  <meta property="og:type" content="website"/>
-  <meta property="og:url" content="https://sireltfawq.online/"/>
+  <title>منصة التفوق في التاريخ</title>
+
+  <!-- الكلمات المفتاحية لمنصة التاريخ -->
+  <meta name="keywords" content="منصة تاريخ, سر التفوق, كورسات تاريخ ثانوية عامة, شرح تاريخ الصف الثالث الثانوي, امتحانات تاريخ أونلاين, مراجعة تاريخ ثانوية عامة">
+  <meta name="description" content="منصة سر التفوق التعليمية لمادة التاريخ - شرح وافي وامتحانات أونلاين للثانوية العامة">
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  
 <style>
 :root {
   --tan:          #D2B48C;
@@ -104,7 +97,7 @@ ul { list-style: none; }
 }
 .intro-btn:hover { background: rgba(255,255,255,0.22); }
 #introSkipBtn {
-  display: inline-flex;
+  display: none;
   align-items: center; gap: 8px;
   padding: 0 20px; border-radius: 50px; width: auto;
   font-family: 'Cairo', sans-serif; font-size: 0.88rem; font-weight: 700;
@@ -117,7 +110,6 @@ ul { list-style: none; }
   border: 1px solid rgba(255,255,255,0.15); backdrop-filter: blur(8px);
   cursor: pointer; display: none;
 }
-
 /* AUTH BUTTONS */
 .nav-auth {
   display: flex; align-items: center; gap: 10px; flex-shrink: 0;
@@ -174,7 +166,7 @@ ul { list-style: none; }
 }
 .reveal-up.visible { opacity: 1; transform: translateY(0); }
 
-/* NAVBAR */
+/* NAVBAR — بني داكن خلفية + تان كلام، نفس ستايل الكود الأصلي */
 .navbar {
   position: sticky; top: 0; z-index: 1000;
   background: linear-gradient(135deg, #1A0800 0%, #280C02 50%, #3D1200 100%);
@@ -679,494 +671,593 @@ ul { list-style: none; }
 
 /* USER LOGGED-IN STATE IN NAVBAR */
 .user-logged-in { display: flex; align-items: center; gap: 12px; }
-.user-welcome-text { color: var(--tan-light); font-family: 'Cairo', sans-serif; font-size: 0.9rem; font-weight: 600; }
+.user-welcome-text { color: var(--tan-light); font-family: 'Cairo', sans-serif; font-size: 0.9rem; font-weight: 700; white-space: nowrap; }
 
-/* MEDIA QUERIES */
-@media (max-width: 900px) {
-  .hero-inner { flex-direction: column; text-align: center; }
-  .hero-eyebrow { justify-content: center; }
-  .hero-cta { justify-content: center; }
-  .hero-image-ring { width: 280px; height: 280px; }
-  .bio-grid, .contact-grid { grid-template-columns: 1fr; gap: 32px; }
-  .progress-cards { grid-template-columns: 1fr; }
+/* Auth buttons duplicated inside the mobile menu — hidden on desktop, only shown when the mobile dropdown is open */
+.nav-auth-mobile { display: none; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
   .achievements-counters { grid-template-columns: repeat(2,1fr); }
-  .hamburger { display: flex; }
+  .bio-grid { grid-template-columns: 1fr; }
+  .hero-image-ring { width: 340px; height: 340px; }
+}
+@media (max-width: 768px) {
+  :root { --navbar-h: 64px; }
+  .navbar-inner { padding: 10px 16px; }
   .navbar-menu {
-    display: none; width: 100%; flex-direction: column;
-    padding: 16px 0; border-top: 1px solid rgba(210,180,140,0.1);
+    display: none !important;
   }
-  .navbar-menu.open { display: flex; }
-  .nav-link { width: 100%; justify-content: center; }
+  .navbar-menu.open {
+    display: flex !important;
+    position: absolute;
+    top: 100%; right: 0; left: 0;
+    background: linear-gradient(180deg, #1A0800, #0E0500);
+    flex-direction: column; align-items: stretch;
+    padding: 12px 14px 18px; gap: 4px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5); z-index: 999;
+    animation: slideDown 0.3s ease;
+    border-top: 1px solid rgba(210,180,140,0.12);
+  }
+  .navbar-menu.open .nav-link { justify-content: flex-start; padding: 13px 16px; width: 100%; }
+  .nav-auth-mobile.nav-auth-mobile {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-top: 8px; padding-top: 14px;
+    border-top: 1px solid rgba(210,180,140,0.12);
+  }
+  .navbar-menu.open .nav-auth-mobile .nav-btn-login,
+  .navbar-menu.open .nav-auth-mobile .nav-btn-register {
+    justify-content: center; padding: 12px 18px; width: 100%;
+  }
+  .navbar-menu.open .nav-auth-mobile .nav-btn-login span,
+  .navbar-menu.open .nav-auth-mobile .nav-btn-register span { display: inline; }
+  @keyframes slideDown { from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:translateY(0);} }
+  .hamburger { display: flex; }
+  .nav-auth-desktop { display: none; }
+  .brand-title { font-size: 1.15rem; }
+  .logo-icon { width: 52px; height: 52px; }
+  .hero-inner { flex-direction: column; text-align: center; align-items: center; }
+  .hero-text  { max-width: 100%; }
+  .hero-image-ring { width: 220px; height: 220px; order: -1; margin-bottom: 12px; }
+  .hero-cta { justify-content: center; }
+  .hero-description { margin-inline: auto; }
+  .progress-cards { grid-template-columns: 1fr; }
+  .students-grid  { grid-template-columns: 1fr; }
+  .achievements-counters { grid-template-columns: repeat(2,1fr); }
+  .contact-grid { grid-template-columns: 1fr; }
+  .bio-stats { grid-template-columns: repeat(2,1fr); }
+  .bio-card { padding: 30px 22px; }
+  .contact-card { padding: 28px 22px; }
+  .section { padding: 56px 18px; }
+  .hero-section { padding: 36px 16px; }
+  .student-card { flex-wrap: wrap; }
 }
 @media (max-width: 480px) {
   .achievements-counters { grid-template-columns: 1fr; }
-  .hero-title { font-size: 2.1rem; }
-  .section { padding: 60px 16px; }
+  .hero-image-ring { width: 180px; height: 180px; }
+  .bio-stats { grid-template-columns: 1fr 1fr; }
 }
 </style>
 </head>
 <body>
 
-  <!-- INTRO VIDEO OVERLAY -->
-  <div id="introOverlay">
-    <video id="introVideo" autoplay muted playsinline>
-      <source src="/static/videos/intro.mp4" type="video/mp4"/>
-    </video>
-    <div id="introProgress"><div id="introProgressFill"></div></div>
-    <div id="introControls">
-      <button class="intro-btn" id="introMuteBtn" title="كتم/تشغيل الصوت"><i class="fa-solid fa-volume-xmark"></i></button>
-      <button class="intro-btn" id="introSkipBtn"><span>تخطي</span> <i class="fa-solid fa-forward"></i></button>
-    </div>
-    <div id="introMuteNotice"><i class="fa-solid fa-volume-high"></i> اضغط لتشغيل الصوت</div>
+<!-- INTRO OVERLAY -->
+<div id="introOverlay">
+  <video id="introVideo" src="/static/videos/intro.mp4" playsinline preload="auto"></video>
+  <div id="introControls">
+    <button class="intro-btn" id="introMuteBtn" title="كتم / تشغيل الصوت">
+      <i class="fas fa-volume-up" id="introMuteIcon"></i>
+    </button>
+    <button class="intro-btn" id="introSkipBtn">
+      <i class="fas fa-forward-step"></i>
+      <span style="font-family:'Cairo',sans-serif;font-size:.85rem;font-weight:700;">تخطي</span>
+    </button>
   </div>
+  <div id="introProgress"><div id="introProgressFill"></div></div>
+  <div id="introMuteNotice">
+    <i class="fas fa-volume-xmark"></i> اضغط هنا لتشغيل الصوت
+  </div>
+</div>
+<!-- END INTRO -->
 
-  <!-- NAVBAR -->
-  <nav class="navbar" id="navbar">
-    <div class="navbar-inner">
-      <a href="#" class="navbar-brand">
-        <img src="/static/images/logo.png" alt="شعار منصة سر التفوق" class="logo-icon"/>
-        <span class="brand-title">سر التفوق</span>
+<nav class="navbar" id="navbar">
+  <div class="navbar-inner">
+    <div class="navbar-brand">
+      <div class="logo-icon">
+        <img src="/static/images/logo.png" alt="لوجو المنصة" style="width:100%;height:100%;object-fit:contain;border-radius:10px;"/>
+      </div>
+      <span class="brand-title">منصة سر التفوق في التاريخ</span>
+    </div>
+
+    <ul class="navbar-menu" id="navMenu">
+      <li><a href="/"           class="nav-link active">الرئيسية</a></li>
+      <li><a href="/courses/"     class="nav-link">كورسات</a></li>
+      <li><a href="/my-courses/"  class="nav-link">كورساتي</a></li>
+      <li><a href="/exams/"       class="nav-link">امتحانات</a></li>
+      <li><a href="/results/"     class="nav-link">معلوماتي</a></li>
+
+      {% if user.is_staff or user.is_superuser %}
+        <li>
+          <a href="/admin/" class="nav-link admin-btn" target="_blank" style="color: #FFD700; font-weight: bold; border: 1px dashed #FFD700; padding: 5px 10px; border-radius: 6px; background-color: rgba(255, 215, 0, 0.1);">
+            <i class="fa-solid fa-user-shield"></i> لوحة التحكم
+          </a>
+        </li>
+      {% endif %}
+
+      <!-- Auth buttons duplicated here so they show inside the mobile dropdown, just like on desktop -->
+      <li class="nav-auth-mobile">
+        {% if user.is_authenticated %}
+          <span class="user-welcome-text">أهلاً بك، {{ user.username }} 👤</span>
+          <a href="{% url 'signout' %}" class="nav-btn-login" style="border-color: rgba(255, 99, 71, 0.4); color: #ff6b6b;">
+            <i class="fa-solid fa-sign-out-alt"></i>
+            <span>تسجيل الخروج</span>
+          </a>
+        {% else %}
+          <a href="{% url 'signin' %}" class="nav-btn-login">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            <span>تسجيل الدخول</span>
+          </a>
+          <a href="{% url 'signup' %}" class="nav-btn-register">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>حساب جديد</span>
+          </a>
+        {% endif %}
+      </li>
+    </ul>
+
+    <div class="nav-auth nav-auth-desktop">
+        {% if user.is_authenticated %}
+          <div class="user-logged-in">
+            <span class="user-welcome-text">
+              أهلاً بك، {{ user.username }} 👤
+            </span>
+            <a href="{% url 'signout' %}" class="nav-btn-login" style="border-color: rgba(255, 99, 71, 0.4); color: #ff6b6b;">
+              <i class="fa-solid fa-sign-out-alt"></i>
+              <span>تسجيل الخروج</span>
+            </a>
+          </div>
+        {%   else %}
+          <a href="{% url 'signin' %}" class="nav-btn-login">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            <span>تسجيل الدخول</span>
+          </a>
+          <a href="{% url 'signup' %}" class="nav-btn-register">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>حساب جديد</span>
+          </a>
+        {% endif %}
+      </div>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero-section" id="hero">
+  <div class="hero-shapes">
+    <div class="hero-shape"></div><div class="hero-shape"></div>
+    <div class="hero-shape"></div><div class="hero-shape"></div>
+    <div class="hero-ornament"></div><div class="hero-ornament"></div>
+  </div>
+  <div class="particles" id="particles"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-eyebrow">منصة سر التفوق في التاريخ</div>
+      <h1 class="hero-title">تعلّم بلا حدود<br/><span class="highlight">وحقّق التفوق</span></h1>
+      <p class="hero-description">منصة تعليمية متكاملة في مادة التاريخ تجمع بين الكورسات التفاعلية والامتحانات الإلكترونية ومتابعة التقدم، لتجربة تعليمية استثنائية.</p>
+      <div class="hero-cta">
+        <a href="/courses/" class="btn-primary"><span>ابدأ الآن</span><i class="fas fa-arrow-left"></i></a>
+        <a href="#bio" class="btn-outline"><i class="fas fa-play-circle"></i><span>تعرّف علينا</span></a>
+      </div>
+    </div>
+    <div class="hero-image-wrap">
+      <div class="hero-image-ring">
+        <div class="hero-image-glow"></div>
+        <img class="hero-image" src="/static/images/teacher.jpg" alt="صورة الأستاذ"
+             onerror="this.style.display='none';document.getElementById('teacherPh').style.display='flex'"/>
+        <div id="teacherPh" style="display:none;position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,#280C02,#1A0800);align-items:center;justify-content:center;flex-direction:column;gap:8px;border:4px solid rgba(210,180,140,0.35);">
+          <i class="fas fa-user" style="font-size:4rem;color:rgba(210,180,140,0.4);"></i>
+          <span style="font-size:0.85rem;color:rgba(210,180,140,0.5);font-weight:600;">صورة الأستاذ</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section bio-section" id="bio">
+  <div class="section-inner">
+    <div class="bio-grid">
+      <div class="bio-card reveal">
+        <div class="bio-avatar-wrap">
+          <div class="bio-avatar-icon"><i class="fas fa-user-tie"></i></div>
+          <div>
+            <div class="bio-name">أ. أحمد أبو السعود</div>
+            <div class="bio-role">مدرس التاريخ — منصة سر التفوق</div>
+          </div>
+        </div>
+        <p class="bio-text">خبرة تزيد عن 25 عامًا في تدريس التاريخ للمرحله الثانوية. يتميز بأسلوب تبسيطي فريد يجعل المادة ممتعة وسهلة الفهم. حاصل على ماجستير في التعليم وشهادات دولية متعددة في المناهج التفاعلية.</p>
+        <div class="bio-stats">
+          <div class="bio-stat"><span class="bio-stat-number">25+</span><span class="bio-stat-label">سنة خبرة</span></div>
+          <div class="bio-stat"><span class="bio-stat-number">٥٠٠٠+</span><span class="bio-stat-label">طالب متخرج</span></div>
+          <div class="bio-stat"><span class="bio-stat-number">٩٨٪</span><span class="bio-stat-label">نسبة نجاح</span></div>
+        </div>
+      </div>
+      <div class="bio-skills">
+        <div class="reveal" style="transition-delay:0.1s">
+          <div class="section-badge"><i class="fas fa-graduation-cap"></i> كفاءات الأستاذ</div>
+          <h2 class="section-title">خبرة أكاديمية <span>متميزة</span></h2>
+          <p class="section-subtitle">مستوى التميز في كل مادة دراسية بناءً على نتائج الطلاب</p>
+        </div>
+        <div class="skill-item reveal" style="transition-delay:0.15s">
+          <div class="skill-header"><span>التاريخ المصري القديم</span><span>97%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="--target-width:97%"></div></div>
+        </div>
+        <div class="skill-item reveal" style="transition-delay:0.2s">
+          <div class="skill-header"><span>التاريخ الإسلامي</span><span>95%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="--target-width:95%"></div></div>
+        </div>
+        <div class="skill-item reveal" style="transition-delay:0.25s">
+          <div class="skill-header"><span>التاريخ الحديث والمعاصر</span><span>93%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="--target-width:93%"></div></div>
+        </div>
+        <div class="skill-item reveal" style="transition-delay:0.3s">
+          <div class="skill-header"><span>الجغرافيا السياسية</span><span>90%</span></div>
+          <div class="skill-bar"><div class="skill-fill" style="--target-width:90%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section progress-section" id="results">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-badge"><i class="fas fa-chart-bar"></i> تقدمك الدراسي</div>
+      <h2 class="section-title">إحصائيات <span style="color:var(--tan);">الأداء</span></h2>
+      <p class="section-subtitle">تابع تقدمك الأكاديمي بشكل مستمر ومرئي</p>
+    </div>
+    <svg width="0" height="0" style="position:absolute">
+      <defs>
+        <linearGradient id="donutGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#B8966A"/>
+          <stop offset="100%" stop-color="#D2B48C"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <div class="progress-cards">
+      <div class="progress-card reveal" style="transition-delay:0.1s">
+        <div class="progress-icon"><i class="fas fa-tasks"></i></div>
+        <span class="progress-number" data-count="{{ completed_tasks_count|default:0 }}">0</span>
+        <span class="progress-label">المهام المكتملة</span>
+      </div>
+
+      <div class="progress-card reveal" style="transition-delay:0.2s">
+        <div class="donut-wrap" style="position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+
+          <svg class="donut-svg" width="120" height="120" viewBox="0 0 120 120" style="display: block;">
+            <circle class="donut-bg"   cx="60" cy="60" r="50" stroke-width="10"/>
+            <circle class="donut-fill" cx="60" cy="60" r="50" stroke-width="10"
+              stroke-dasharray="314" stroke-dashoffset="314" data-target="{{ total_completion_percentage|default:0 }}"/>
+          </svg>
+
+          <div class="donut-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -85%); margin: 0; padding: 0; pointer-events: none; white-space: nowrap;">
+              {{ total_completion_percentage|default:0 }}%
+          </div>
+
+          <span class="progress-label">نسبة الإنجاز الكلية</span>
+        </div>
+      </div>
+
+      <div class="progress-card reveal" style="transition-delay:0.3s">
+        <div class="progress-icon"><i class="fas fa-fire"></i></div>
+        <span class="progress-number" data-count="{{ streak_days|default:0 }}">0</span>
+        <span class="progress-label">أيام متتالية</span>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:12px;" class="reveal-up">
+      <a href="/results/" class="progress-more-btn">
+        <i class="fas fa-chart-line"></i><span>عرض المزيد</span>
       </a>
-
-      <ul class="navbar-menu" id="navMenu">
-        <li><a href="#hero" class="nav-link active">الرئيسية</a></li>
-        <li><a href="#bio" class="nav-link">عن المعلم</a></li>
-        <li><a href="#progress" class="nav-link">مستوى التقدم</a></li>
-        <li><a href="#students" class="nav-link">الطلاب المتفوقون</a></li>
-        <li><a href="#achievements" class="nav-link">الإنجازات</a></li>
-        <li><a href="#contact" class="nav-link">تواصل معنا</a></li>
-      </ul>
-
-      <div class="nav-auth">
-        <a href="/login/" class="nav-btn-login">
-          <i class="fa-solid fa-right-to-bracket"></i>
-          <span>تسجيل الدخول</span>
-        </a>
-        <a href="/register/" class="nav-btn-register">
-          <i class="fa-solid fa-user-plus"></i>
-          <span>حساب جديد</span>
-        </a>
-      </div>
-
-      <button class="hamburger" id="hamburgerBtn" aria-label="قائمة التنقل">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
     </div>
-  </nav>
+  </div>
+</section>
 
-  <!-- HERO SECTION -->
-  <section class="hero-section" id="hero">
-    <div class="hero-shapes">
-      <div class="hero-shape"></div>
-      <div class="hero-shape"></div>
-      <div class="hero-shape"></div>
-      <div class="hero-shape"></div>
-      <div class="hero-ornament"></div>
-      <div class="hero-ornament"></div>
+<section class="section students-section" id="top-students">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-badge"><i class="fas fa-trophy"></i> المتفوقون أونلاين</div>
+      <h2 class="section-title">أعلى <span>الدرجات</span> أونلاين</h2>
+      <p class="section-subtitle">قائمة الشرف للطلاب المتميزين في الاختبارات الإلكترونية</p>
     </div>
 
-    <!-- PARTICLES LAYER -->
-    <div class="particles" id="particlesContainer"></div>
+    <div class="students-grid">
+      {% for student in top_students %}
+        <div class="student-card reveal" style="transition-delay:0.05s">
 
-    <div class="hero-inner">
-      <div class="hero-text reveal">
-        <div class="hero-eyebrow">منصة سر التفوق التعليمية</div>
-        <h1 class="hero-title">
-          رحلتك نحو <br/>
-          <span class="highlight">الدرجة النهائية</span> في التاريخ
-        </h1>
-        <p class="hero-description">
-          تطبيق أحدث أساليب الفهم والتحليل لمادة التاريخ للثانوية العامة. نبسط لك المعلومة بأسلوب خرائط ذكية ومراجعات شاملة تعتمد على النظام الحديث.
-        </p>
-        <div class="hero-cta">
-          <a href="/courses/" class="btn-primary">
-            <span>استكشف الكورسات</span>
-            <i class="fa-solid fa-arrow-left"></i>
-          </a>
-          <a href="#contact" class="btn-outline">
-            <span>تواصل معنا</span>
-          </a>
-        </div>
-      </div>
-
-      <div class="hero-image-wrap reveal">
-        <div class="hero-image-ring">
-          <div class="hero-image-glow"></div>
-          <img src="/static/images/hero-teacher.png" alt="معلم مادة التاريخ" class="hero-image"/>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- BIO SECTION -->
-  <section class="section bio-section" id="bio">
-    <div class="section-inner">
-      <div class="bio-grid">
-        <div class="bio-card reveal">
-          <div class="bio-avatar-wrap">
-            <div class="bio-avatar-icon">
-              <i class="fa-solid fa-graduation-cap"></i>
-            </div>
-            <div>
-              <h2 class="bio-name">خبير مادة التاريخ</h2>
-              <div class="bio-role">خبرة أكثر من 12 عاماً في التأسيس والتأهيل للثانوية العامة</div>
-            </div>
-          </div>
-          <p class="bio-text">
-            متخصص في تحويل المناهج التاريخية المعقدة إلى ربط منطقي وتحليلي يسهل على الطالب استيعابه والتفوق فيه بالنظام الحديث للأسئلة.
-          </p>
-          <div class="bio-stats">
-            <div class="bio-stat">
-              <span class="bio-stat-number">+12</span>
-              <span class="bio-stat-label">سنوات خبرة</span>
-            </div>
-            <div class="bio-stat">
-              <span class="bio-stat-number">+15k</span>
-              <span class="bio-stat-label">طالب وطالبة</span>
-            </div>
-            <div class="bio-stat">
-              <span class="bio-stat-number">98%</span>
-              <span class="bio-stat-label">نسبة النجاح</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="bio-skills reveal">
-          <div class="section-badge">أسلوب الشرح</div>
-          <h2 class="section-title">لماذا تختار <span>سر التفوق؟</span></h2>
-          
-          <div class="skill-item">
-            <div class="skill-header">
-              <span>ربط الأحداث التاريخية والنظام الحديث</span>
-              <span>95%</span>
-            </div>
-            <div class="skill-bar">
-              <div class="skill-fill" style="--target-width: 95%;"></div>
-            </div>
+          <div class="student-rank rank-{{ student.arrange|default:'other' }}">
+            {% if student.arrange == 1 %}
+              <i class="fas fa-crown"></i>
+            {% else %}
+              {{ student.arrange }}
+            {% endif %}
           </div>
 
-          <div class="skill-item">
-            <div class="skill-header">
-              <span>الخرائط الذهنية وتسهيل الحفظ والتحليل</span>
-              <span>90%</span>
-            </div>
-            <div class="skill-bar">
-              <div class="skill-fill" style="--target-width: 90%;"></div>
-            </div>
-          </div>
-
-          <div class="skill-item">
-            <div class="skill-header">
-              <span>امتحانات ورش عمل وتدريبات مستمرة</span>
-              <span>98%</span>
-            </div>
-            <div class="skill-bar">
-              <div class="skill-fill" style="--target-width: 98%;"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROGRESS SECTION WITH DONUT CHART -->
-  <section class="section progress-section" id="progress">
-    <div class="section-inner">
-      <div style="text-align: center; margin-bottom: 40px;">
-        <div class="section-badge">متابعة شاملة</div>
-        <h2 class="section-title">مستوى التقدم والتدريب</h2>
-        <p class="section-subtitle" style="margin: 0 auto;">نتابع مستوى الطلاب بشكل دوري مع تقديم تقارير فورية عن نتائج الاختبارات والواجبات المنزلية.</p>
-      </div>
-
-      <div class="progress-cards">
-        <div class="progress-card reveal-up">
-          <div class="progress-icon"><i class="fa-solid fa-book-open"></i></div>
-          <span class="progress-number">48+</span>
-          <span class="progress-label">محاضرة تفاعلية ومراجعة</span>
-        </div>
-
-        <!-- DONUT CHART ITEM -->
-        <div class="progress-card reveal-up">
-          <div class="donut-wrap">
-            <svg class="donut-svg" width="120" height="120" viewBox="0 0 120 120">
-              <defs>
-                <linearGradient id="donutGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#B8966A"/>
-                  <stop offset="100%" stop-color="#E8CFA8"/>
-                </linearGradient>
-              </defs>
-              <circle class="donut-bg" cx="60" cy="60" r="48" stroke-width="10"/>
-              <circle class="donut-fill" id="donutFillCircle" cx="60" cy="60" r="48" stroke-width="10" stroke-dasharray="301.59" stroke-dashoffset="301.59"/>
-              <text class="donut-center" x="60" y="60">88%</text>
-            </svg>
-            <span class="progress-label">نسبة إنجاز المنهج الكلي</span>
-          </div>
-        </div>
-
-        <div class="progress-card reveal-up">
-          <div class="progress-icon"><i class="fa-solid fa-file-pen"></i></div>
-          <span class="progress-number">120+</span>
-          <span class="progress-label">اختبار أونلاين وتدريب تحليلي</span>
-        </div>
-      </div>
-
-      <div style="text-align: center; margin-top: 20px;">
-        <a href="/courses/" class="progress-more-btn">
-          <span>شاهد تفاصيل أكثر</span>
-          <i class="fa-solid fa-angle-left"></i>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- TOP STUDENTS SECTION -->
-  <section class="section students-section" id="students">
-    <div class="section-inner">
-      <div style="text-align: center; margin-bottom: 40px;">
-        <div class="section-badge">لوحة الشرف</div>
-        <h2 class="section-title">أوائل <span>المنصة</span></h2>
-        <p class="section-subtitle" style="margin: 0 auto;">طلابنا المتميزون الحاصلون على أعلى الدرجات في الاختبارات الشاملة لهذا الشهر.</p>
-      </div>
-
-      <div class="students-grid">
-        <div class="student-card reveal-up">
-          <div class="student-rank rank-1">1</div>
           <div class="student-info">
-            <h3 class="student-name">أحمد محمد علي</h3>
-            <div class="student-grade">الصف الثالث الثانوي</div>
+            <div class="student-name">
+              {% if student.name %}
+                {{ student.name }}
+              {% elif student.student %}
+                {{ student.student }}
+              {% else %}
+                {{ student }}
+              {% endif %}
+            </div>
+            <div class="student-grade">{{ student.get_grade_display }}</div>
           </div>
+
           <div class="student-score">
-            <span class="student-score-number">100%</span>
-            <span class="student-score-label">الدرجة</span>
+            <span class="student-score-number">
+              {% if student.score %}
+                {{ student.score }}
+              {% elif student.percentage %}
+                {{ student.percentage }}
+              {% else %}
+                ---
+              {% endif %}
+            </span>
+            <span class="student-score-label">المجموع</span>
           </div>
-        </div>
 
-        <div class="student-card reveal-up">
-          <div class="student-rank rank-2">2</div>
-          <div class="student-info">
-            <h3 class="student-name">مريم محمود السيد</h3>
-            <div class="student-grade">الصف الثالث الثانوي</div>
-          </div>
-          <div class="student-score">
-            <span class="student-score-number">99%</span>
-            <span class="student-score-label">الدرجة</span>
-          </div>
-        </div>
+          {% if student.arrange == 1 %}
+            <div class="student-badge">⭐ الأول</div>
+          {% endif %}
 
-        <div class="student-card reveal-up">
-          <div class="student-rank rank-3">3</div>
-          <div class="student-info">
-            <h3 class="student-name">عمر خالد عبد العزيز</h3>
-            <div class="student-grade">الصف الثالث الثانوي</div>
-          </div>
-          <div class="student-score">
-            <span class="student-score-number">98%</span>
-            <span class="student-score-label">الدرجة</span>
-          </div>
+        </div>
+      {% empty %}
+        <div style="grid-column: span 3; text-align: center; color: var(--tan-dark); padding: 30px; font-weight: bold;">
+          <i class="fas fa-info-circle"></i> جاري تحديث لوحة الشرف وأوائل الطلاب...
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section achievements-section" id="achievements">
+  <div class="section-inner">
+    <div class="reveal" style="text-align:center;margin-bottom:52px;">
+      <div class="section-badge"><i class="fas fa-medal"></i> إنجازات السنتر</div>
+      <h2 class="section-title" style="color:#fff;text-align:center;">أرقام <span style="color:var(--tan-light);">تفتخر بها</span></h2>
+      <p class="section-subtitle" style="color:rgba(232,207,168,0.8);text-align:center;margin:0 auto;">أرقام حقيقية من داخل السنتر تعكس مستوى التميز</p>
+    </div>
+    <div class="achievements-counters">
+      <div class="counter-card reveal" style="transition-delay:0.05s">
+        <span class="counter-icon">🏆</span>
+        <span class="counter-number" data-count="1240"><span class="count-val">0</span><span class="plus">+</span></span>
+        <span class="counter-label">طالب ناجح بتقدير ممتاز</span>
+      </div>
+      <div class="counter-card reveal" style="transition-delay:0.1s">
+        <span class="counter-icon">📊</span>
+        <span class="counter-number" data-count="97"><span class="count-val">0</span><span class="plus">%</span></span>
+        <span class="counter-label">نسبة النجاح العامة</span>
+      </div>
+      <div class="counter-card reveal" style="transition-delay:0.15s">
+        <span class="counter-icon">🎯</span>
+        <span class="counter-number" data-count="320"><span class="count-val">0</span><span class="plus">+</span></span>
+        <span class="counter-label">طالب حصل على 90% فأكثر</span>
+      </div>
+      <div class="counter-card reveal" style="transition-delay:0.2s">
+        <span class="counter-icon">⭐</span>
+        <span class="counter-number" data-count="58"><span class="count-val">0</span><span class="plus">+</span></span>
+        <span class="counter-label">متصدر على مستوى المحافظة</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section contact-section" id="contact">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="section-badge"><i class="fas fa-headset"></i> التواصل والدعم</div>
+      <h2 class="section-title">تواصل <span>معنا</span></h2>
+      <p class="section-subtitle">نحن هنا لمساعدتك في أي وقت</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-card reveal" style="transition-delay:0.1s">
+        <div class="contact-card-title"><i class="fas fa-share-alt"></i> تابع الأستاذ على السوشيال ميديا</div>
+        <div class="social-buttons">
+          <a href="https://wa.me/+201064604848" target="_blank" class="social-btn whatsapp"><i class="fab fa-whatsapp"></i><span>واتساب — تواصل مباشر</span></a>
+          <a href="https://www.facebook.com/share/1FkBeD4ZKk/?mibextid=wwXIfr" target="_blank" class="social-btn facebook"><i class="fab fa-facebook-f"></i><span>صفحة الفيسبوك</span></a>
+          <a href="https://www.youtube.com/channel/UCUyivBn9sVFulAaFerUTeGQ" target="_blank" class="social-btn youtube"><i class="fab fa-youtube"></i><span>قناة يوتيوب</span></a>
+          <a href="#" target="_blank" class="social-btn telegram"><i class="fab fa-telegram-plane"></i><span>قناة التيليجرام</span></a>
+        </div>
+      </div>
+      <div class="contact-card reveal" style="transition-delay:0.2s">
+        <div class="contact-card-title"><i class="fas fa-life-ring"></i> الدعم الفني</div>
+        <a href="https://wa.me/+201064604848" target="_blank" class="support-btn">
+          <i class="fab fa-whatsapp"></i>
+          <div><div style="font-weight:700;margin-bottom:3px;">دعم فني واتساب</div><div style="font-size:0.8rem;opacity:0.7;">متاح على مدار 24 ساعة للرد على استفساراتك</div></div>
+        </a>
+        <a href="mailto:sireltfawq@gmail.com" class="support-btn">
+          <i class="fas fa-envelope"></i>
+          <div><div style="font-weight:700;margin-bottom:3px;">البريد الإلكتروني</div><div style="font-size:0.8rem;opacity:0.7;">sireltfawq@gmail.com</div></div>
+        </a>
+        <div class="support-info">
+          <i class="fas fa-clock" style="color:var(--tan);margin-left:6px;"></i>
+          أوقات الدعم: السبت – الخميس من ٩ صباحًا حتى 11 مساءً
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ACHIEVEMENTS SECTION -->
-  <section class="section achievements-section" id="achievements">
-    <div class="section-inner">
-      <div class="achievements-counters">
-        <div class="counter-card reveal-up">
-          <i class="fa-solid fa-users counter-icon" style="color: var(--tan);"></i>
-          <span class="counter-number">15<span class="plus">k+</span></span>
-          <span class="counter-label">طالب مشترك</span>
-        </div>
-
-        <div class="counter-card reveal-up">
-          <i class="fa-solid fa-circle-play counter-icon" style="color: var(--tan);"></i>
-          <span class="counter-number">350<span class="plus">+</span></span>
-          <span class="counter-label">فيديو حصري</span>
-        </div>
-
-        <div class="counter-card reveal-up">
-          <i class="fa-solid fa-award counter-icon" style="color: var(--tan);"></i>
-          <span class="counter-number">98<span class="plus">%</span></span>
-          <span class="counter-label">نسبة تفوق الطلاب</span>
-        </div>
-
-        <div class="counter-card reveal-up">
-          <i class="fa-solid fa-clock counter-icon" style="color: var(--tan);"></i>
-          <span class="counter-number">24<span class="plus">/7</span></span>
-          <span class="counter-label">دعم فني وأكاديمي</span>
-        </div>
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo-icon small">
+        <img src="/static/images/logo.png" alt="لوجو المنصة" style="width:100%;height:100%;object-fit:contain;border-radius:8px;"/>
       </div>
+      <span class="footer-brand-name">منصة سر التفوق في التاريخ</span>
     </div>
-  </section>
+    <div class="footer-divider"></div>
+    <p class="footer-powered">Powered by <span class="sigma-text">Sigma Web</span></p>
+    <p class="footer-contact-label">تواصل معنا</p>
+    <a href="https://wa.me/+201117701289" target="_blank" class="footer-whatsapp">
+      <i class="fab fa-whatsapp"></i><span>+201117701289</span>
+    </a>
+    <p class="footer-copy">&copy; 2025 منصة التفوق في التاريخ. جميع الحقوق محفوظة.</p>
+  </div>
+</footer>
 
-  <!-- CONTACT SECTION -->
-  <section class="section contact-section" id="contact">
-    <div class="section-inner">
-      <div style="text-align: center; margin-bottom: 40px;">
-        <div class="section-badge">تواصل معنا</div>
-        <h2 class="section-title">نحن هنا <span>لمساعدتك</span></h2>
-        <p class="section-subtitle" style="margin: 0 auto;">اختر الوسيلة المناسبة لك للتواصل مع الدعم الفني أو الاستفسار عن الكورسات والاشتراكات.</p>
-      </div>
+<script>
+/* INTRO LOGIC */
+(function () {
+  const LS_KEY  = 'platform_intro_seen';
+  const SS_KEY  = 'platform_intro_session';
+  const overlay = document.getElementById('introOverlay');
+  const video   = document.getElementById('introVideo');
+  const fill    = document.getElementById('introProgressFill');
+  const muteBtn = document.getElementById('introMuteBtn');
+  const muteIco = document.getElementById('introMuteIcon');
+  const skipBtn = document.getElementById('introSkipBtn');
+  const notice  = document.getElementById('introMuteNotice');
 
-      <div class="contact-grid">
-        <div class="contact-card reveal">
-          <h3 class="contact-card-title">
-            <i class="fa-solid fa-comments"></i>
-            <span>منصات التواصل الاجتماعي</span>
-          </h3>
-          <div class="social-buttons">
-            <a href="https://wa.me/201000000000" target="_blank" class="social-btn whatsapp">
-              <i class="fa-brands fa-whatsapp"></i>
-              <span>واتساب الدعم الفني</span>
-            </a>
-            <a href="#" target="_blank" class="social-btn facebook">
-              <i class="fa-brands fa-facebook-f"></i>
-              <span>صفحة الفيسبوك الرسمية</span>
-            </a>
-            <a href="#" target="_blank" class="social-btn youtube">
-              <i class="fa-brands fa-youtube"></i>
-              <span>قناة اليوتيوب</span>
-            </a>
-            <a href="#" target="_blank" class="social-btn telegram">
-              <i class="fa-brands fa-telegram"></i>
-              <span>قناة التليجرام للمراجعات</span>
-            </a>
-          </div>
-        </div>
+  if (sessionStorage.getItem(SS_KEY)) {
+    overlay.style.display = 'none';
+    return;
+  }
+  sessionStorage.setItem(SS_KEY, '1');
 
-        <div class="contact-card reveal">
-          <h3 class="contact-card-title">
-            <i class="fa-solid fa-headset"></i>
-            <span>المساعدة والاستفسارات</span>
-          </h3>
-          <a href="https://wa.me/201000000000" target="_blank" class="support-btn">
-            <i class="fa-solid fa-headset"></i>
-            <span>التحدث المباشر مع فريق الدعم</span>
-          </a>
-          <div class="support-info">
-            أوقات العمل المتاحة للدعم الفني والرد على استفسارات الاشتراكات: يومياً من الساعة 10:00 صباحاً وحتى 10:00 مساءً.
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  function dismissIntro() {
+    overlay.classList.add('fade-out');
+    setTimeout(() => { overlay.style.display = 'none'; }, 900);
+  }
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <span class="footer-brand-name">منصة سر التفوق في التاريخ</span>
-      </div>
-      <div class="footer-divider"></div>
-      <p class="footer-powered">تم التطوير بواسطة <span class="sigma-text">تيم سيجما</span></p>
-      <div class="footer-contact-label">للتواصل مع مطور المنصة</div>
-      <a href="https://wa.me/201111629881" target="_blank" class="footer-whatsapp">
-        <i class="fa-brands fa-whatsapp"></i>
-        <span>01111629881</span>
-      </a>
-      <p class="footer-copy">جميع الحقوق محفوظة &copy; 2026 منصة سر التفوق</p>
-    </div>
-  </footer>
+  video.muted = false;
+  video.play().catch(() => {
+    video.muted = true;
+    muteIco.className = 'fas fa-volume-xmark';
+    notice.style.display = 'flex';
+    video.play();
+  });
 
-  <!-- JAVASCRIPT -->
-  <script>
-    // 1. INTRO OVERLAY HANDLERS
-    const introOverlay = document.getElementById('introOverlay');
-    const introVideo = document.getElementById('introVideo');
-    const introProgressFill = document.getElementById('introProgressFill');
-    const introMuteBtn = document.getElementById('introMuteBtn');
-    const introSkipBtn = document.getElementById('introSkipBtn');
+  video.addEventListener('timeupdate', () => {
+    if (video.duration) fill.style.width = (video.currentTime / video.duration * 100) + '%';
+  });
+  video.addEventListener('ended', dismissIntro);
 
-    if (introVideo && introOverlay) {
-      introVideo.addEventListener('timeupdate', () => {
-        if (introVideo.duration) {
-          const pct = (introVideo.currentTime / introVideo.duration) * 100;
-          introProgressFill.style.width = pct + '%';
-        }
+  setTimeout(() => { skipBtn.style.display = 'inline-flex'; }, 3000);
+  skipBtn.addEventListener('click', dismissIntro);
+
+  muteBtn.addEventListener('click', () => {
+    video.muted = !video.muted;
+    muteIco.className = video.muted ? 'fas fa-volume-xmark' : 'fas fa-volume-up';
+  });
+  notice.addEventListener('click', () => {
+    video.muted = false;
+    muteIco.className = 'fas fa-volume-up';
+    notice.style.display = 'none';
+  });
+})();
+/* END INTRO LOGIC */
+</script>
+
+<script>
+const hamburger = document.getElementById('hamburger');
+const navMenu   = document.getElementById('navMenu');
+
+hamburger.addEventListener('click', () => {
+  navMenu.classList.toggle('open');
+  hamburger.classList.toggle('active');
+});
+
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 20); });
+
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', function () {
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    this.classList.add('active');
+    navMenu.classList.remove('open');
+    hamburger.classList.remove('active');
+  });
+});
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', function (e) {
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+  });
+});
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      entry.target.querySelectorAll('.skill-fill').forEach(bar => bar.classList.add('animated'));
+      entry.target.querySelectorAll('.donut-fill').forEach(donut => {
+        const pct = parseFloat(donut.dataset.target || 82) / 100;
+        donut.style.strokeDashoffset = (314 * (1 - pct)).toFixed(1);
       });
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal, .reveal-up').forEach(el => revealObserver.observe(el));
 
-      const closeIntro = () => {
-        introOverlay.classList.add('fade-out');
-        setTimeout(() => introOverlay.remove(), 850);
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const numEl = entry.target.querySelector('.counter-number[data-count]');
+      if (!numEl) return;
+      const target = parseInt(numEl.dataset.count, 10);
+      const valEl  = numEl.querySelector('.count-val');
+      if (!valEl) return;
+      let start = 0;
+      const step = (ts) => {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / 2000, 1);
+        valEl.textContent = Math.floor((1 - Math.pow(1 - p, 3)) * target);
+        if (p < 1) requestAnimationFrame(step); else valEl.textContent = target;
       };
-
-      introVideo.addEventListener('ended', closeIntro);
-      if (introSkipBtn) introSkipBtn.addEventListener('click', closeIntro);
-
-      if (introMuteBtn) {
-        introMuteBtn.addEventListener('click', () => {
-          introVideo.muted = !introVideo.muted;
-          introMuteBtn.innerHTML = introVideo.muted 
-            ? '<i class="fa-solid fa-volume-xmark"></i>' 
-            : '<i class="fa-solid fa-volume-high"></i>';
-        });
-      }
+      requestAnimationFrame(step);
+      counterObserver.unobserve(entry.target);
     }
+  });
+}, { threshold: 0.4 });
+document.querySelectorAll('.counter-card').forEach(el => counterObserver.observe(el));
 
-    // 2. DYNAMIC PARTICLES GENERATOR
-    const particlesContainer = document.getElementById('particlesContainer');
-    if (particlesContainer) {
-      for (let i = 0; i < 25; i++) {
-        const p = document.createElement('div');
-        p.className = 'particle';
-        const size = Math.random() * 6 + 2;
-        p.style.width = size + 'px';
-        p.style.height = size + 'px';
-        p.style.left = Math.random() * 100 + '%';
-        p.style.top = Math.random() * 100 + '%';
-        p.style.animationDuration = (Math.random() * 8 + 4) + 's';
-        p.style.animationDelay = (Math.random() * 5) + 's';
-        particlesContainer.appendChild(p);
-      }
+const progressObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const target = parseInt(el.dataset.count, 10);
+      let start = 0;
+      const step = (ts) => {
+        if (!start) start = ts;
+        const p = Math.min((ts - start) / 1800, 1);
+        el.textContent = Math.floor((1 - Math.pow(1 - p, 3)) * target);
+        if (p < 1) requestAnimationFrame(step); else el.textContent = target;
+      };
+      requestAnimationFrame(step);
+      progressObserver.unobserve(el);
     }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.progress-number[data-count]').forEach(el => progressObserver.observe(el));
 
-    // 3. TOGGLE MOBILE NAVIGATION MENU
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const navMenu = document.getElementById('navMenu');
+const container = document.getElementById('particles');
+if (container) {
+  for (let i = 0; i < 22; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 6 + 3;
+    p.style.cssText = `width:${size}px;height:${size}px;right:${Math.random()*100}%;bottom:${Math.random()*40}%;animation-duration:${Math.random()*8+5}s;animation-delay:${Math.random()*8}s;`;
+    container.appendChild(p);
+  }
+}
 
-    if (hamburgerBtn && navMenu) {
-      hamburgerBtn.addEventListener('click', () => {
-        hamburgerBtn.classList.toggle('active');
-        navMenu.classList.toggle('open');
-      });
-    }
-
-    // 4. DYNAMIC NAVBAR SCROLL EFFECT
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-      } else {
-        navbar.classList.remove('scrolled');
-      }
-    });
-
-    // 5. SCROLL REVEAL & ANIMATIONS (SKILLS & DONUT CHART)
-    const observerOptions = { threshold: 0.15 };
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          
-          // Animate Skill Fill Bars
-          const skillFills = entry.target.querySelectorAll('.skill-fill');
-          skillFills.forEach(fill => fill.classList.add('animated'));
-
-          // Animate Donut Chart if inside viewport
-          const donutCircle = entry.target.querySelector('#donutFillCircle');
-          if (donutCircle) {
-            const circumference = 301.59;
-            const targetPct = 88;
-            const offset = circumference - (circumference * targetPct / 100);
-            donutCircle.style.strokeDashoffset = offset;
-          }
-        }
-      });
-    }, observerOptions);
-
-    document.querySelectorAll('.reveal, .reveal-up, .progress-card').forEach(el => observer.observe(el));
-  </script>
+window.addEventListener('load', () => { document.querySelector('.hero-text')?.classList.add('visible'); });
+</script>
 </body>
 </html>
